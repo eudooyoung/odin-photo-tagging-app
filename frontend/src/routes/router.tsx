@@ -1,11 +1,18 @@
-import App from "@/App.tsx";
-import { createBrowserRouter } from "react-router";
+import FindGeeksApp from "@/FindGeeksApp.tsx";
+import { Home } from "@/pages/home/Home.tsx";
+import { createBrowserRouter, type RouteObject } from "react-router";
 
 const routes = [
   {
     path: "/",
-    element: <App />,
+    element: <FindGeeksApp />,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+    ],
   },
-];
+] satisfies RouteObject[];
 
 export const router = createBrowserRouter(routes);
