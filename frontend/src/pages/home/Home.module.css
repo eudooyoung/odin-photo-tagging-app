@@ -1,7 +1,0 @@
-.imageWrapper {
-  flex: 1;
-  background-image: url("../../assets/geeks_in_the_hall.png");
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-}
