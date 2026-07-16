@@ -1,10 +1,11 @@
-import { NavBar } from "../nav-bar/NavBar.tsx";
+import { NavLink } from "react-router";
 
 export const Header = () => {
   return (
     <header>
-      <h1>Find Geeks</h1>
-      <NavBar />
+      <NavLink to="/">
+        <h1>Find Geeks</h1>
+      </NavLink>
     </header>
   );
 };
