@@ -1,0 +1,22 @@
+.hero {
+  min-height: 100dvh;
+
+  display: flex;
+}
+
+.content {
+  flex: 1;
+  background-image:
+    /* linear-gradient(var(--overlay), var(--overlay)), */ url("../../assets/geeks_in_the_hall.png");
+  /* background-size: cover; */
+  /* background-position: center; */
+  /* background-repeat: no-repeat; */
+
+  display: grid;
+  place-content: center;
+}
+
+.heroContent {
+  background: white;
+  text-align: center;
+}
