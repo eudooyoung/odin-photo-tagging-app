@@ -12,6 +12,15 @@ datasource db {
   provider = "postgresql"
 }
 
+model Geek {
+  id     Int    @id @default(autoincrement())
+  name   String @unique
+  x      Int
+  y      Int
+  width  Int
+  height Int
+}
+
 model Session {
   id        String   @id
   sid       String   @unique
