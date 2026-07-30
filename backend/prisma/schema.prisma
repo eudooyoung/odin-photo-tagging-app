@@ -13,12 +13,31 @@ datasource db {
 }
 
 model Geek {
-  id     Int    @id
-  name   String @unique
+  id     Int            @id
+  name   String         @unique
   x      Int
   y      Int
   width  Int
   height Int
+  games  GeeksOnGames[]
+}
+
+model Game {
+  id         Int            @id @default(autoincrement())
+  player     String?
+  createdAt  DateTime       @default(now())
+  finishedAt DateTime?
+  geeks      GeeksOnGames[]
+}
+
+model GeeksOnGames {
+  geek    Geek    @relation(fields: [geekId], references: [id])
+  geekId  Int
+  game    Game    @relation(fields: [gameId], references: [id])
+  gameId  Int
+  isFound Boolean @default(false)
+
+  @@id([geekId, gameId])
 }
 
 model Session {
