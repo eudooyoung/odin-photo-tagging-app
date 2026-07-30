@@ -37,8 +37,8 @@
   },
   "scripts": {
     "build": "prisma generate && rm -rf dist/ && tsc && cp -r src/views dist/src/ && cp -r src/public dist/src/",
-    "start": "tsx dist/src/app.js",
-    "dev": "tsx --watch src/app.ts"
+    "start": "tsx dist/src/server.js",
+    "dev": "tsx --watch src/server.ts"
   },
   "keywords": [],
   "author": "",
