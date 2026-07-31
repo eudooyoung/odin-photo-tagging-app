@@ -27,7 +27,7 @@ model Game {
   player     String?
   createdAt  DateTime       @default(now())
   finishedAt DateTime?
-  geeks      GeeksOnGames[]
+  targets    GeeksOnGames[]
 }
 
 model GeeksOnGames {
