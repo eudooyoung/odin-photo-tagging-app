@@ -1,5 +1,15 @@
 import { prisma } from "@/lib/prisma.js";
 
 export const findAllGeeks = async () => {
-  return prisma.geek.findMany();
+  return await prisma.geek.findMany();
+};
+
+export const findRandomGeeksByIds = async (ids: number[]) => {
+  return await prisma.geek.findMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+  });
 };

@@ -1,8 +1,6 @@
-import { createApp } from "./app.js";
+import { app } from "./app.js";
 import { env } from "./config/env.config.js";
 import { registerShutdown } from "./shutdown.js";
-
-const app = createApp();
 
 const port = env.port ?? 3000;
 

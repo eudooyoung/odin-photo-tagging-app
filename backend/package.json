@@ -36,6 +36,7 @@
     "vitest": "^4.1.10"
   },
   "scripts": {
+    "test": "vitest",
     "build": "prisma generate && rm -rf dist/ && tsc && cp -r src/views dist/src/ && cp -r src/public dist/src/",
     "start": "tsx dist/src/server.js",
     "dev": "tsx --watch src/server.ts"
