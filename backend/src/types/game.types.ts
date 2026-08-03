@@ -14,16 +14,12 @@ export type GameWithTargets = Game & {
 
 export type GetGameResponse = {
   game: GameWithTargets;
-};
-
-export type GetTargetsResponse = {
-  targets: Target[];
+  isGameEnded: boolean;
 };
 
 export type AttemptResponse = {
   isAttemptValid: boolean;
   targetId?: number;
-  isGameEnded: boolean;
 };
 
 export type AttemptRequest = {

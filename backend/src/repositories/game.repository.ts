@@ -43,3 +43,12 @@ export const findGameById = async (id: number) => {
     },
   });
 };
+
+export const endGame = async (id: number) => {
+  await prisma.game.update({
+    where: { id },
+    data: {
+      finishedAt: new Date(),
+    },
+  });
+};

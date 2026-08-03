@@ -1,14 +1,11 @@
 import { prisma } from "@/lib/prisma.js";
 
-export const markTargetAsFound = async ({
-  gameId,
-  targetId,
-}: {
-  gameId: number;
-  targetId: number;
-}) => {
-  const { geekId } = await prisma.geeksOnGames.update({
-    where: { geekId_gameId: { geekId: targetId, gameId } },
+export const markTargetAsFound = async (
+  gameId: number,
+  geekId: number,
+) => {
+  const result = await prisma.geeksOnGames.update({
+    where: { geekId_gameId: { geekId, gameId } },
     data: {
       isFound: true,
     },
@@ -16,14 +13,10 @@ export const markTargetAsFound = async ({
       geekId: true,
     },
   });
-  return geekId;
+  return result.geekId;
 };
 
-export const hasGameEnded = async ({
-  gameId,
-}: {
-  gameId: number;
-}) => {
+export const hasGameEnded = async (gameId: number) => {
   const targetsToFind = await prisma.geeksOnGames.count({
     where: { gameId, isFound: false },
   });
