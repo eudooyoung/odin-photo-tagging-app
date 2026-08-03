@@ -96,4 +96,24 @@ describe("game api", () => {
     const { isGameEnded } = gameResponse;
     expect(isGameEnded).toBe(true);
   });
+
+  it("create score", async () => {
+    const gameId = await createGame();
+    const { game } = await getGameResponseBody(gameId);
+    const { targets } = game;
+    for (let i = 0; i < 5; i++) {
+      await request(app).post(`/games/${gameId}/attempts`).send({
+        targetId: targets[i]!.id,
+        x: targets[i]!.x,
+        y: targets[i]!.y,
+      });
+    }
+    const res = await request(app)
+      .post(`/games/${gameId}/scores`)
+      .send({
+        username: "Test User",
+      });
+
+    expect(res.status).toBe(201);
+  });
 });

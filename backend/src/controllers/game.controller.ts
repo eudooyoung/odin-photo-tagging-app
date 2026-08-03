@@ -1,3 +1,4 @@
+import BadRequestError from "@/errors/badRequestError.js";
 import { attemptValidator } from "@/lib/attemptValidator.js";
 import { randomDigitsGenerator } from "@/lib/randomDigitGenerater.js";
 import {
@@ -42,4 +43,13 @@ export const createAttempt: RequestHandler = async (req, res) => {
   }
 
   return res.json({ isAttemptValid });
+};
+
+export const createScore: RequestHandler = (req, res) => {
+  const { createdAt, finishedAt } = req.game;
+  if (!finishedAt) {
+    throw new BadRequestError("Game has not ended yet");
+  }
+  console.log(finishedAt.getTime() - createdAt.getTime());
+  res.status(201).end();
 };
