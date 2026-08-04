@@ -8,7 +8,7 @@ export const gameProvider: RequestHandler = async (
   next,
 ) => {
   const { gameId } = req.params;
-  const game = await findGameById(Number(gameId));
+  const game = await findGameById(gameId as string);
   if (!game) {
     throw new RecordNotFoundError("Game not found");
   }

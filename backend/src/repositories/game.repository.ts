@@ -2,7 +2,7 @@ import type { Geek } from "@/generated/prisma/client.js";
 import { prisma } from "@/lib/prisma.js";
 
 export const createGameWithGeeks = async (geeks: Geek[]) => {
-  const { id } = await prisma.game.create({
+  const { publicId: gameId } = await prisma.game.create({
     data: {
       targets: {
         create: geeks.map((geek) => ({
@@ -15,7 +15,7 @@ export const createGameWithGeeks = async (geeks: Geek[]) => {
       },
     },
   });
-  return id;
+  return gameId;
 
   /*   return prisma.$transaction(async (tx) => {
     const { id } = await tx.game.create({ data: {} });
@@ -31,9 +31,9 @@ export const createGameWithGeeks = async (geeks: Geek[]) => {
   }); */
 };
 
-export const findGameById = async (id: number) => {
+export const findGameById = async (id: string) => {
   return await prisma.game.findUnique({
-    where: { id },
+    where: { publicId: id },
     include: {
       targets: {
         include: {

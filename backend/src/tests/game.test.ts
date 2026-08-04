@@ -30,7 +30,7 @@ describe("game api", () => {
 
     expect(res.status).toBe(201);
     expect(res.headers["content-type"]).toMatch(/json/);
-    expect(body.gameId).toBeTypeOf("number");
+    expect(body.gameId).toBeTypeOf("string");
   });
 
   it("get game", async () => {
@@ -39,7 +39,9 @@ describe("game api", () => {
     const { game, isGameEnded } = getBody<GetGameResponse>(res);
 
     expect(res.status).toBe(200);
-    expect(game).toEqual(expect.objectContaining({ id: gameId }));
+    expect(game).toEqual(
+      expect.objectContaining({ publicId: gameId }),
+    );
     expect(game.targets).toHaveLength(5);
     expect(isGameEnded).toBe(false);
   });
