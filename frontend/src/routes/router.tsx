@@ -15,7 +15,7 @@ const routes = [
       },
       {
         element: <Layout />,
-        children: [{ path: "game", element: <GamePage /> }],
+        children: [{ path: "games/:gameId", element: <GamePage /> }],
       },
     ],
   },

@@ -22,11 +22,15 @@ export const GamePage = () => {
   return (
     <>
       <h2 hidden>Game Page</h2>
-      <img src={PuzzleImage} alt="puzzle image" onMouseDown={imgClickHandler} />
+      <img
+        src={PuzzleImage}
+        alt="puzzle image"
+        onMouseDown={imgClickHandler}
+      />
       <dialog ref={modalRef} closedby="any">
         <ul>
           {geeks.map((geek) => (
-            <li>{geek.name}</li>
+            <li key={geek.id}>{geek.name}</li>
           ))}
         </ul>
       </dialog>
