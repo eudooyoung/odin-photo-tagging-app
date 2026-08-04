@@ -44,11 +44,46 @@ export const findGameById = async (id: number) => {
   });
 };
 
-export const endGame = async (id: number) => {
+export const finishGameWithRecord = async (
+  id: number,
+  finishedAt: Date,
+  record: number,
+) => {
   await prisma.game.update({
     where: { id },
     data: {
-      finishedAt: new Date(),
+      finishedAt,
+      record,
     },
+  });
+};
+
+export const playerExists = async (player: string) => {
+  const count = await prisma.game.count({ where: { player } });
+  return count !== 0;
+};
+
+export const updateGameWithPlayer = async (
+  id: number,
+  player: string,
+) => {
+  await prisma.game.update({
+    where: { id },
+    data: {
+      player,
+    },
+  });
+};
+
+export const findLeaderboard = async () => {
+  return prisma.game.findMany({
+    select: {
+      player: true,
+      record: true,
+    },
+    orderBy: {
+      record: "desc",
+    },
+    take: 10,
   });
 };

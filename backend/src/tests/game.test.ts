@@ -1,8 +1,9 @@
 import { app } from "@/app.js";
-import type {
-  CreateGameResponse,
-  AttemptResponse,
-  GetGameResponse,
+import {
+  type CreateGameResponse,
+  type AttemptResponse,
+  type GetGameResponse,
+  type GetLeaderboardResponse,
 } from "@/types/game.types.js";
 import request, { type Response } from "supertest";
 import { describe, expect, it } from "vitest";
@@ -93,7 +94,35 @@ describe("game api", () => {
 
     gameResponse = await getGameResponseBody(gameId);
 
-    const { isGameEnded } = gameResponse;
-    expect(isGameEnded).toBe(true);
+    const res = gameResponse;
+    expect(res.isGameEnded).toBe(true);
+    expect(res.game.record).not.toBe(null);
+  });
+
+  it("create score", async () => {
+    const gameId = await createGame();
+    const { game } = await getGameResponseBody(gameId);
+    const { targets } = game;
+    for (let i = 0; i < 5; i++) {
+      await request(app).post(`/games/${gameId}/attempts`).send({
+        targetId: targets[i]!.id,
+        x: targets[i]!.x,
+        y: targets[i]!.y,
+      });
+    }
+    const res = await request(app)
+      .patch(`/games/${gameId}/player`)
+      .send({
+        player: "Test Player",
+      });
+
+    expect(res.status).toBe(201);
+  });
+
+  it("get leaderboard", async () => {
+    const res = await request(app).get("/games/leaderboard");
+    const { leaderboard } = getBody<GetLeaderboardResponse>(res);
+
+    expect(Array.isArray(leaderboard)).toBe(true);
   });
 });

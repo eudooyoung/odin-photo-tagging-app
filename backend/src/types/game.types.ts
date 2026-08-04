@@ -27,3 +27,11 @@ export type AttemptRequest = {
   x: number;
   y: number;
 };
+
+export type SetPlayerRequest = {
+  player: string;
+};
+
+export type GetLeaderboardResponse = {
+  leaderboard: { player: string; record: number }[];
+};
