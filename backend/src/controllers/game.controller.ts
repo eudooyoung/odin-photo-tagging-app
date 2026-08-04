@@ -1,5 +1,5 @@
 import { attemptValidator } from "@/lib/attemptValidator.js";
-import { randomDigitsGenerator } from "@/lib/randomDigitGenerater.js";
+import { randomDigitsGenerator } from "@/lib/randomDigitGenerator.js";
 import {
   createGameWithGeeks,
   findLeaderboard,
@@ -28,8 +28,13 @@ export const createGame: RequestHandler = async (req, res) => {
 
 export const getGame: RequestHandler = (req, res) => {
   const game = req.game;
+  const publicTargets = game.targets.map((target) => ({
+    id: target.id,
+    name: target.name,
+  }));
+  const publicGame = { ...game, targets: publicTargets };
   const isGameEnded = game.finishedAt !== null;
-  return res.json({ game, isGameEnded });
+  return res.json({ game: publicGame, isGameEnded });
 };
 
 export const createAttempt: RequestHandler = async (req, res) => {

@@ -1,3 +1,4 @@
+import RecordNotFoundError from "@/errors/recordNotFoundError.js";
 import type { Geek } from "@/generated/prisma/client.js";
 import { prisma } from "@/lib/prisma.js";
 
@@ -32,7 +33,7 @@ export const createGameWithGeeks = async (geeks: Geek[]) => {
 };
 
 export const findGameById = async (id: string) => {
-  return await prisma.game.findUnique({
+  const game = await prisma.game.findUnique({
     where: { publicId: id },
     include: {
       targets: {
@@ -42,6 +43,15 @@ export const findGameById = async (id: string) => {
       },
     },
   });
+  if (!game) {
+    throw new RecordNotFoundError("Game not found");
+  }
+  const targets = game.targets.map(({ geek, isFound }) => ({
+    ...geek,
+    isFound,
+  }));
+
+  return { ...game, targets };
 };
 
 export const finishGameWithRecord = async (

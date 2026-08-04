@@ -1,4 +1,5 @@
 import { app } from "@/app.js";
+import { findGameById } from "@/repositories/game.repository.js";
 import {
   type CreateGameResponse,
   type AttemptResponse,
@@ -10,14 +11,14 @@ import { describe, expect, it } from "vitest";
 
 const getBody = <T>(res: Response) => res.body as T;
 
-const createGame = async (): Promise<number> => {
+const createGame = async () => {
   const res = await request(app).post("/games");
   const { gameId } = getBody<CreateGameResponse>(res);
   return gameId;
 };
 
 const getGameResponseBody = async (
-  gameId: number,
+  gameId: string,
 ): Promise<GetGameResponse> => {
   const res = await request(app).get(`/games/${gameId}`);
   return getBody<GetGameResponse>(res);
@@ -48,8 +49,7 @@ describe("game api", () => {
 
   it("target attempt successful", async () => {
     const gameId = await createGame();
-    const { game } = await getGameResponseBody(gameId);
-    const { targets } = game;
+    const { targets } = await findGameById(gameId);
     const res = await request(app)
       .post(`/games/${gameId}/attempts`)
       .send({
@@ -67,8 +67,7 @@ describe("game api", () => {
 
   it("target attempt fails", async () => {
     const gameId = await createGame();
-    const { game } = await getGameResponseBody(gameId);
-    const { targets } = game;
+    const { targets } = await findGameById(gameId);
     const res = await request(app)
       .post(`/games/${gameId}/attempts`)
       .send({
@@ -84,8 +83,8 @@ describe("game api", () => {
 
   it("target attempt successful with game ends", async () => {
     const gameId = await createGame();
-    let gameResponse = await getGameResponseBody(gameId);
-    const { targets } = gameResponse.game;
+    const { targets } = await findGameById(gameId);
+
     for (let i = 0; i < 5; i++) {
       await request(app).post(`/games/${gameId}/attempts`).send({
         targetId: targets[i]!.id,
@@ -93,18 +92,15 @@ describe("game api", () => {
         y: targets[i]!.y,
       });
     }
+    const res = await getGameResponseBody(gameId);
 
-    gameResponse = await getGameResponseBody(gameId);
-
-    const res = gameResponse;
     expect(res.isGameEnded).toBe(true);
     expect(res.game.record).not.toBe(null);
   });
 
-  it("create score", async () => {
+  it("set player", async () => {
     const gameId = await createGame();
-    const { game } = await getGameResponseBody(gameId);
-    const { targets } = game;
+    const { targets } = await findGameById(gameId);
     for (let i = 0; i < 5; i++) {
       await request(app).post(`/games/${gameId}/attempts`).send({
         targetId: targets[i]!.id,
