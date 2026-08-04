@@ -1,8 +1,9 @@
 import { app } from "@/app.js";
-import type {
-  CreateGameResponse,
-  AttemptResponse,
-  GetGameResponse,
+import {
+  type CreateGameResponse,
+  type AttemptResponse,
+  type GetGameResponse,
+  type GetLeaderboardResponse,
 } from "@/types/game.types.js";
 import request, { type Response } from "supertest";
 import { describe, expect, it } from "vitest";
@@ -93,8 +94,9 @@ describe("game api", () => {
 
     gameResponse = await getGameResponseBody(gameId);
 
-    const { isGameEnded } = gameResponse;
-    expect(isGameEnded).toBe(true);
+    const res = gameResponse;
+    expect(res.isGameEnded).toBe(true);
+    expect(res.game.record).not.toBe(null);
   });
 
   it("create score", async () => {
@@ -109,11 +111,18 @@ describe("game api", () => {
       });
     }
     const res = await request(app)
-      .post(`/games/${gameId}/scores`)
+      .patch(`/games/${gameId}/player`)
       .send({
-        username: "Test User",
+        player: "Test Player",
       });
 
     expect(res.status).toBe(201);
+  });
+
+  it("get leaderboard", async () => {
+    const res = await request(app).get("/games/leaderboard");
+    const { leaderboard } = getBody<GetLeaderboardResponse>(res);
+
+    expect(Array.isArray(leaderboard)).toBe(true);
   });
 });

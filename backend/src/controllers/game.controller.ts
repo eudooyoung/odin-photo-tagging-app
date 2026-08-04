@@ -1,17 +1,23 @@
-import BadRequestError from "@/errors/badRequestError.js";
 import { attemptValidator } from "@/lib/attemptValidator.js";
 import { randomDigitsGenerator } from "@/lib/randomDigitGenerater.js";
 import {
   createGameWithGeeks,
-  endGame,
+  findLeaderboard,
+  finishGameWithRecord,
+  updateGameWithPlayer,
 } from "@/repositories/game.repository.js";
 import { findGeeksByRandomIds } from "@/repositories/geek.repository.js";
 import {
   hasGameEnded,
   markTargetAsFound,
 } from "@/repositories/geeksOnGames.repository.js";
-import type { AttemptRequest } from "@/types/game.types.js";
+import type {
+  AttemptRequest,
+  SetPlayerRequest,
+} from "@/types/game.types.js";
+import { validatePlayer } from "@/validates/player.validate.js";
 import type { RequestHandler } from "express";
+import { matchedData } from "express-validator";
 
 export const createGame: RequestHandler = async (req, res) => {
   const randomIds = randomDigitsGenerator();
@@ -31,25 +37,36 @@ export const createAttempt: RequestHandler = async (req, res) => {
   const attempt = req.body as AttemptRequest;
   const isAttemptValid = attemptValidator(attempt, game.targets);
   if (isAttemptValid) {
+    // hit
     const targetId = await markTargetAsFound(
       game.id,
       attempt.targetId,
     );
     const isGameEnded = await hasGameEnded(game.id);
     if (isGameEnded) {
-      await endGame(game.id);
+      // found all
+      const finishedAt = new Date();
+      const record = finishedAt.getTime() - game.createdAt.getTime();
+      await finishGameWithRecord(game.id, finishedAt, record);
+      return res.json({ isAttemptValid, targetId });
     }
     return res.json({ isAttemptValid, targetId });
   }
-
+  // miss
   return res.json({ isAttemptValid });
 };
 
-export const createScore: RequestHandler = (req, res) => {
-  const { createdAt, finishedAt } = req.game;
-  if (!finishedAt) {
-    throw new BadRequestError("Game has not ended yet");
-  }
-  console.log(finishedAt.getTime() - createdAt.getTime());
+const setPlayerHandler: RequestHandler = async (req, res) => {
+  const { id } = req.game;
+  const { player }: SetPlayerRequest = matchedData(req);
+  await updateGameWithPlayer(id, player);
+
   res.status(201).end();
+};
+
+export const setPlayer = [...validatePlayer, setPlayerHandler];
+
+export const getLeaderboard: RequestHandler = async (req, res) => {
+  const leaderboard = await findLeaderboard();
+  res.json({ leaderboard });
 };

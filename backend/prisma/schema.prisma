@@ -25,10 +25,10 @@ model Geek {
 
 model Game {
   id         Int       @id @default(autoincrement())
-  player     String?
+  player     String?   @unique
   createdAt  DateTime  @default(now())
   finishedAt DateTime?
-  score      Int?
+  record     Int?
 
   targets GeeksOnGames[]
 }
