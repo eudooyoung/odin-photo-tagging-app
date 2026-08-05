@@ -1,13 +1,11 @@
 import PuzzleImage from "@/assets/geeks_in_the_hall.png";
+import { useGame } from "@/hooks/useGame.ts";
 import { useRef, type MouseEventHandler } from "react";
+import { useParams } from "react-router";
 
 export const GamePage = () => {
-  const geeks = [
-    { id: 1, name: "geek-1" },
-    { id: 2, name: "geek-2" },
-    { id: 3, name: "geek-3" },
-  ];
-
+  const { gameId } = useParams();
+  const { game, gameError, gameLoading } = useGame(gameId as string);
   const modalRef = useRef<HTMLDialogElement | null>(null);
 
   const imgClickHandler: MouseEventHandler = (e) => {
@@ -19,9 +17,14 @@ export const GamePage = () => {
     }
   };
 
+  if (gameLoading) {
+    return <>game loading...</>;
+  }
+
   return (
     <>
       <h2 hidden>Game Page</h2>
+      {gameError && gameError.message}
       <img
         src={PuzzleImage}
         alt="puzzle image"
@@ -29,9 +32,10 @@ export const GamePage = () => {
       />
       <dialog ref={modalRef} closedby="any">
         <ul>
-          {geeks.map((geek) => (
-            <li key={geek.id}>{geek.name}</li>
-          ))}
+          {game &&
+            game.targets.map((target) => (
+              <li key={target.id}>{target.name}</li>
+            ))}
         </ul>
       </dialog>
     </>
