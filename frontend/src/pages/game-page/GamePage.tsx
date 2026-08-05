@@ -34,7 +34,9 @@ export const GamePage = () => {
         <ul>
           {game &&
             game.targets.map((target) => (
-              <li key={target.id}>{target.name}</li>
+              <li key={target.id}>
+                <button>{target.name}</button>
+              </li>
             ))}
         </ul>
       </dialog>

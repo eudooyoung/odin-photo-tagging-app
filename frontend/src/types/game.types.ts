@@ -12,3 +12,14 @@ export type Game = {
     isFound: boolean;
   }[];
 };
+
+export type AttemptRequest = {
+  targetId: number;
+  x: number;
+  y: number;
+};
+
+export type AttemptResponse = {
+  isAttemptValid: boolean;
+  targetId?: number;
+};
