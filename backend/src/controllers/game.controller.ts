@@ -28,10 +28,14 @@ export const createGame: RequestHandler = async (req, res) => {
 
 export const getGame: RequestHandler = (req, res) => {
   const game = req.game;
-  const publicTargets = game.targets.map((target) => ({
-    id: target.id,
-    name: target.name,
-  }));
+  const publicTargets = game.targets.map((target) =>
+    target.isFound
+      ? target
+      : {
+          id: target.id,
+          name: target.name,
+        },
+  );
   const publicGame = { ...game, targets: publicTargets };
   const isGameEnded = game.finishedAt !== null;
   return res.json({ game: publicGame, isGameEnded });
@@ -43,19 +47,14 @@ export const createAttempt: RequestHandler = async (req, res) => {
   const isAttemptValid = attemptValidator(attempt, game.targets);
   if (isAttemptValid) {
     // hit
-    const targetId = await markTargetAsFound(
-      game.id,
-      attempt.targetId,
-    );
+    await markTargetAsFound(game.id, attempt.targetId);
     const isGameEnded = await hasGameEnded(game.id);
     if (isGameEnded) {
       // found all
       const finishedAt = new Date();
       const record = finishedAt.getTime() - game.createdAt.getTime();
       await finishGameWithRecord(game.id, finishedAt, record);
-      return res.json({ isAttemptValid, targetId });
     }
-    return res.json({ isAttemptValid, targetId });
   }
   // miss
   return res.json({ isAttemptValid });

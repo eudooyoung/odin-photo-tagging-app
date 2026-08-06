@@ -25,7 +25,6 @@ export type GetGameResponse = {
 
 export type AttemptResponse = {
   isAttemptValid: boolean;
-  targetId?: number;
 };
 
 export type AttemptRequest = {

@@ -40,9 +40,7 @@ describe("game api", () => {
     const { game, isGameEnded } = getBody<GetGameResponse>(res);
 
     expect(res.status).toBe(200);
-    expect(game).toEqual(
-      expect.objectContaining({ publicId: gameId }),
-    );
+    expect(game).toEqual(expect.objectContaining({ publicId: gameId }));
     expect(game.targets).toHaveLength(5);
     expect(isGameEnded).toBe(false);
   });
@@ -57,12 +55,10 @@ describe("game api", () => {
         x: targets[0]!.x,
         y: targets[0]!.y,
       });
-    const { isAttemptValid, targetId } =
-      getBody<AttemptResponse>(res);
+    const { isAttemptValid } = getBody<AttemptResponse>(res);
 
     expect(res.status).toBe(200);
     expect(isAttemptValid).toBe(true);
-    expect(targetId).toBe(targets[0]!.id);
   });
 
   it("target attempt fails", async () => {
@@ -108,11 +104,9 @@ describe("game api", () => {
         y: targets[i]!.y,
       });
     }
-    const res = await request(app)
-      .patch(`/games/${gameId}/player`)
-      .send({
-        player: "Test Player",
-      });
+    const res = await request(app).patch(`/games/${gameId}/player`).send({
+      player: "Test Player",
+    });
 
     expect(res.status).toBe(201);
   });
