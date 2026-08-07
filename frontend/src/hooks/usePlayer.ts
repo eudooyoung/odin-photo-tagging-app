@@ -9,13 +9,16 @@ export const usePlayer = (gameId: string) => {
     setPlayerLoading(true);
     setPlayerError(null);
     try {
-      const response = await fetch(`${env.apiBaseURL}/${gameId}/player`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${env.apiBaseURL}/games/${gameId}/player`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ player }),
         },
-        body: JSON.stringify({ player }),
-      });
+      );
 
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);

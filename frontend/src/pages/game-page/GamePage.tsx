@@ -1,5 +1,6 @@
 import PuzzleImage from "@/assets/geeks_in_the_hall.png";
 import { useAttempt } from "@/hooks/useAttempt.ts";
+import { useCreateGame } from "@/hooks/useCreateGame.ts";
 import { useGame } from "@/hooks/useGame.ts";
 import { usePlayer } from "@/hooks/usePlayer.ts";
 import { coordConverter } from "@/lib/coordConverter.ts";
@@ -10,14 +11,17 @@ import {
   type MouseEventHandler,
   type SubmitEventHandler,
 } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 export const GamePage = () => {
   const gameId = useParams().gameId as string;
+  const navigate = useNavigate();
   const { game, gameError, gameLoading, refetchGame } = useGame(gameId);
   const { createAttempt, attemptError, attemptLoading } =
     useAttempt(gameId);
   const { setPlayer, playerError, playerLoading } = usePlayer(gameId);
+  const { createGame, createGameError, createGameLoading } =
+    useCreateGame();
   const [attemptCoord, setAttemptCoord] = useState({
     x: -1,
     y: -1,
@@ -70,6 +74,13 @@ export const GamePage = () => {
     const success = await setPlayer(playerInput);
     if (success) {
       setIsPlayerSet(true);
+    }
+  };
+
+  const newGameHandler = async () => {
+    const gameId = await createGame();
+    if (gameId) {
+      navigate(`/games/${gameId}`);
     }
   };
 
@@ -132,10 +143,14 @@ export const GamePage = () => {
                 value={playerInput}
                 onChange={(e) => setPlayerInput(e.target.value)}
               />
-              <button>Submit</button>
+              <button disabled={playerLoading}>Submit</button>
             </>
           )}
-          <button>New Game</button>
+          <button onClick={newGameHandler} disabled={createGameLoading}>
+            New Game
+          </button>
+          {playerError && <>{playerError.message}</>}
+          {createGameError && <>{createGameError.message}</>}
         </form>
       </dialog>
     </>
