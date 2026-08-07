@@ -1,6 +1,5 @@
 export type Game = {
-  id: number;
-  publicId: string;
+  id: string;
   player: string | null;
   createdAt: Date;
   finishedAt: Date | null;

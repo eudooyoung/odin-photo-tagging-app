@@ -1,14 +1,33 @@
 import { GamePage } from "@/pages/game-page/GamePage.tsx";
-import type { AttemptResponse } from "@/types/game.types.ts";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { mockUseGame, mockUseAttempt } = vi.hoisted(() => ({
-  mockUseGame: vi.fn(),
-  mockUseAttempt: vi.fn(),
-}));
+const { mockUseGame, defaultUseGame, mockUseAttempt, defaultUseAttempt } =
+  vi.hoisted(() => {
+    const defaultUseGame = {
+      game: {
+        id: "gameId",
+        targets: [{ id: 1, name: "target-1", isFound: false }],
+      },
+      gameLoading: false,
+      gameError: null as Error | null,
+      refetchGame: vi.fn(),
+    };
+    const defaultUseAttempt = {
+      createAttempt: vi.fn(),
+      attemptError: null as Error | null,
+      attemptLoading: false,
+    };
+
+    return {
+      mockUseGame: vi.fn(() => defaultUseGame),
+      defaultUseGame,
+      mockUseAttempt: vi.fn(() => defaultUseAttempt),
+      defaultUseAttempt,
+    };
+  });
 
 vi.mock("@/hooks/useGame.ts", () => ({
   useGame: mockUseGame,
@@ -17,11 +36,6 @@ vi.mock("@/hooks/useGame.ts", () => ({
 vi.mock("@/hooks/useAttempt.ts", () => ({
   useAttempt: mockUseAttempt,
 }));
-
-const mockGame = {
-  id: "gameId",
-  targets: [{ id: "targetId", name: "target-1" }],
-};
 
 describe("game page", () => {
   beforeEach(() => {
@@ -34,14 +48,9 @@ describe("game page", () => {
 
   it("click picture shows targets", async () => {
     const user = userEvent.setup();
-    mockUseGame.mockReturnValue({
-      game: mockGame,
-      gameLoading: false,
-      gameError: null,
-    });
     render(
       <MemoryRouter>
-        <GamePage />
+        <GamePage />,
       </MemoryRouter>,
     );
 
@@ -52,6 +61,7 @@ describe("game page", () => {
 
   it("show loading while fetching game", () => {
     mockUseGame.mockReturnValue({
+      ...defaultUseGame,
       gameLoading: true,
     });
     render(
@@ -62,8 +72,9 @@ describe("game page", () => {
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
   });
 
-  it("show error message when exists", () => {
+  it("show game error message when exists", () => {
     mockUseGame.mockReturnValue({
+      ...defaultUseGame,
       gameError: new Error("fetch game failed"),
     });
     render(
@@ -74,21 +85,19 @@ describe("game page", () => {
     expect(screen.getByText(/failed/i)).toBeInTheDocument();
   });
 
-  it("mark the target when hits", async () => {
+  it("refetch game when hits", async () => {
     const user = userEvent.setup();
+    const mockRefetchGame = vi.fn();
     mockUseGame.mockReturnValue({
-      game: mockGame,
-      gameLoading: false,
-      gameError: null,
+      ...defaultUseGame,
+      refetchGame: mockRefetchGame,
     });
     const mockCreateAttempt = vi.fn().mockResolvedValue({
-      targetId: 1,
       isAttemptValid: true,
     });
     mockUseAttempt.mockReturnValue({
+      ...defaultUseAttempt,
       createAttempt: mockCreateAttempt,
-      attemptError: null,
-      attemptLoading: false,
     });
     render(
       <MemoryRouter>
@@ -98,5 +107,56 @@ describe("game page", () => {
 
     await user.click(screen.getByRole("img", { name: /puzzle/i }));
     await user.click(screen.getByRole("button", { name: /target-1/i }));
+    expect(mockCreateAttempt).toHaveBeenCalled();
+    expect(mockRefetchGame).toHaveBeenCalled();
+  });
+
+  it("disable targets when attempt loading", async () => {
+    const user = userEvent.setup();
+    mockUseAttempt.mockReturnValue({
+      ...defaultUseAttempt,
+      attemptLoading: true,
+    });
+    render(
+      <MemoryRouter>
+        <GamePage />
+      </MemoryRouter>,
+    );
+
+    await user.click(screen.getByRole("img", { name: /puzzle/i }));
+    const targetButton = screen.getByRole("button", {
+      name: /target/i,
+    });
+    expect(targetButton).toBeDisabled();
+  });
+
+  it("show attempt error when exists", () => {
+    mockUseAttempt.mockReturnValue({
+      ...defaultUseAttempt,
+      attemptError: new Error("attempt error"),
+    });
+    render(
+      <MemoryRouter>
+        <GamePage />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText(/attempt error/i)).toBeInTheDocument();
+  });
+
+  it("render marks when targets found", () => {
+    mockUseGame.mockReturnValue({
+      ...defaultUseGame,
+      game: {
+        id: "gameId",
+        targets: [{ id: 1, name: "target-1", isFound: true }],
+      },
+    });
+    render(
+      <MemoryRouter>
+        <GamePage />
+      </MemoryRouter>,
+    );
+    expect(screen.getByTestId("target-marker-1")).toBeInTheDocument();
   });
 });

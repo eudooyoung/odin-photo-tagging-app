@@ -1,19 +1,52 @@
 import PuzzleImage from "@/assets/geeks_in_the_hall.png";
+import { useAttempt } from "@/hooks/useAttempt.ts";
 import { useGame } from "@/hooks/useGame.ts";
-import { useRef, type MouseEventHandler } from "react";
+import { coordConverter } from "@/lib/coordConverter.ts";
+import { useRef, useState, type MouseEventHandler } from "react";
 import { useParams } from "react-router";
 
 export const GamePage = () => {
-  const { gameId } = useParams();
-  const { game, gameError, gameLoading } = useGame(gameId as string);
+  const gameId = useParams().gameId as string;
+  const { game, gameError, gameLoading, refetchGame } = useGame(gameId);
+  const { createAttempt, attemptError, attemptLoading } =
+    useAttempt(gameId);
+  const [attemptCoord, setAttemptCoord] = useState({
+    x: -1,
+    y: -1,
+  });
   const modalRef = useRef<HTMLDialogElement | null>(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   const imgClickHandler: MouseEventHandler = (e) => {
-    const xCoord = e.nativeEvent.clientX - 2;
-    const yCoord = e.nativeEvent.clientY - 2;
-    if (modalRef.current) {
-      modalRef.current.showModal();
-      modalRef.current.style = `top: ${yCoord}px; left: ${xCoord}px`;
+    if (!imageRef.current || !modalRef.current) {
+      return;
+    }
+    const image = imageRef.current;
+    const modal = modalRef.current;
+
+    const { x, y } = coordConverter(e, image);
+    setAttemptCoord({ x, y });
+    modal.showModal();
+    const { width: modalWidth, height: modalHeight } =
+      modal.getBoundingClientRect();
+    const left = Math.min(e.clientX - 5, window.innerWidth - modalWidth);
+    const right = Math.min(
+      e.clientY - 5,
+      window.innerHeight - modalHeight,
+    );
+    modal.style.left = `${left}px`;
+    modal.style.top = `${right}px`;
+  };
+
+  const createAttemptHandler = (targetId: number) => async () => {
+    if (!imageRef.current) {
+      return;
+    }
+
+    const { x, y } = attemptCoord;
+    const { isAttemptValid } = await createAttempt({ targetId, x, y });
+    if (isAttemptValid) {
+      await refetchGame();
     }
   };
 
@@ -21,23 +54,42 @@ export const GamePage = () => {
     return <>game loading...</>;
   }
 
+  if (!game) {
+    return <>game not found</>;
+  }
+
   return (
     <>
       <h2 hidden>Game Page</h2>
       {gameError && gameError.message}
-      <img
-        src={PuzzleImage}
-        alt="puzzle image"
-        onMouseDown={imgClickHandler}
-      />
+      <div>
+        <img
+          src={PuzzleImage}
+          alt="puzzle image"
+          onMouseDown={imgClickHandler}
+          ref={imageRef}
+        />
+        {game.targets
+          .filter((target) => target.isFound)
+          .map((target) => (
+            <div
+              key={target.id}
+              data-testid={`target-marker-${target.id}`}
+            />
+          ))}
+      </div>
       <dialog ref={modalRef} closedby="any">
         <ul>
-          {game &&
-            game.targets.map((target) => (
-              <li key={target.id}>
-                <button>{target.name}</button>
-              </li>
-            ))}
+          {game.targets.map((target) => (
+            <li key={target.id}>
+              <button
+                onClick={createAttemptHandler(target.id)}
+                disabled={attemptLoading}>
+                {target.name}
+              </button>
+              {attemptError && <>{attemptError.message}</>}
+            </li>
+          ))}
         </ul>
       </dialog>
     </>
