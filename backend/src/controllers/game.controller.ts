@@ -37,8 +37,7 @@ export const getGame: RequestHandler = (req, res) => {
         },
   );
   const publicGame = { ...game, targets: publicTargets };
-  const isGameEnded = game.finishedAt !== null;
-  return res.json({ game: publicGame, isGameEnded });
+  return res.json({ game: publicGame });
 };
 
 export const createAttempt: RequestHandler = async (req, res) => {

@@ -37,12 +37,11 @@ describe("game api", () => {
   it("get game", async () => {
     const gameId = await createGame();
     const res = await request(app).get(`/games/${gameId}`);
-    const { game, isGameEnded } = getBody<GetGameResponse>(res);
+    const { game } = getBody<GetGameResponse>(res);
 
     expect(res.status).toBe(200);
     expect(game).toEqual(expect.objectContaining({ publicId: gameId }));
     expect(game.targets).toHaveLength(5);
-    expect(isGameEnded).toBe(false);
   });
 
   it("target attempt successful", async () => {
@@ -90,8 +89,8 @@ describe("game api", () => {
     }
     const res = await getGameResponseBody(gameId);
 
-    expect(res.isGameEnded).toBe(true);
-    expect(res.game.record).not.toBe(null);
+    expect(res.game.finishedAt).toBeTruthy();
+    expect(res.game.record).toBeTruthy();
   });
 
   it("set player", async () => {

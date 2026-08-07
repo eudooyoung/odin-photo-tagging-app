@@ -20,7 +20,6 @@ export type GameWithPublicTargets = Game & {
 
 export type GetGameResponse = {
   game: GameWithPublicTargets;
-  isGameEnded: boolean;
 };
 
 export type AttemptResponse = {
