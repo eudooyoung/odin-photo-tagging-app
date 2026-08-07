@@ -219,6 +219,9 @@ describe("game page", () => {
         name: /new game/i,
       }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /see leaderboard/i }),
+    ).toHaveAttribute("href", "/leaderboard");
   });
 
   it("hide player and submit button when setPlayer succeeds", async () => {

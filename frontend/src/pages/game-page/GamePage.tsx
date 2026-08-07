@@ -11,7 +11,7 @@ import {
   type MouseEventHandler,
   type SubmitEventHandler,
 } from "react";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 
 export const GamePage = () => {
   const gameId = useParams().gameId as string;
@@ -151,6 +151,7 @@ export const GamePage = () => {
           </button>
           {playerError && <>{playerError.message}</>}
           {createGameError && <>{createGameError.message}</>}
+          <Link to={"/leaderboard"}>See leaderboard</Link>
         </form>
       </dialog>
     </>

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import styles from "./LandingPage.module.css";
 import { useCreateGame } from "@/hooks/useCreateGame.ts";
 
@@ -24,6 +24,7 @@ export const LandingPage = () => {
             disabled={createGameLoading}>
             Start
           </button>
+          <Link to={"/leaderboard"}>See Leaderboard</Link>
           {createGameError && createGameError.message}
         </div>
       </div>

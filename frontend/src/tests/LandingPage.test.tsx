@@ -45,4 +45,16 @@ describe("landing page", () => {
       expect(mockNavigate).toHaveBeenCalledWith("/games/gameId");
     });
   });
+
+  it("leaderboard link", () => {
+    render(
+      <MemoryRouter>
+        <LandingPage />
+      </MemoryRouter>,
+    );
+
+    expect(
+      screen.getByRole("link", { name: /see leaderboard/i }),
+    ).toHaveAttribute("href", "/leaderboard");
+  });
 });
