@@ -22,3 +22,5 @@ export type AttemptResponse = {
   isAttemptValid: boolean;
   targetId?: number;
 };
+
+export type Leaderboard = { player: string; record: number }[];

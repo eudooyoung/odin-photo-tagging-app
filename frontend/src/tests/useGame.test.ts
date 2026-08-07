@@ -4,7 +4,7 @@ import { act } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 describe("useGame hook", () => {
-  it("get game with rendering page", async () => {
+  it("get game", async () => {
     const gameId = "gameId";
     const mockGame = {
       id: gameId,
