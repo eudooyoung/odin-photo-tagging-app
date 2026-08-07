@@ -1,12 +1,14 @@
 import PuzzleImage from "@/assets/geeks_in_the_hall.png";
 import { useAttempt } from "@/hooks/useAttempt.ts";
 import { useGame } from "@/hooks/useGame.ts";
+import { usePlayer } from "@/hooks/usePlayer.ts";
 import { coordConverter } from "@/lib/coordConverter.ts";
 import {
   useEffect,
   useRef,
   useState,
   type MouseEventHandler,
+  type SubmitEventHandler,
 } from "react";
 import { useParams } from "react-router";
 
@@ -15,10 +17,13 @@ export const GamePage = () => {
   const { game, gameError, gameLoading, refetchGame } = useGame(gameId);
   const { createAttempt, attemptError, attemptLoading } =
     useAttempt(gameId);
+  const { setPlayer, playerError, playerLoading } = usePlayer(gameId);
   const [attemptCoord, setAttemptCoord] = useState({
     x: -1,
     y: -1,
   });
+  const [playerInput, setPlayerInput] = useState("");
+  const [isPlayerSet, setIsPlayerSet] = useState(false);
   const modalRef = useRef<HTMLDialogElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const resultDialogRef = useRef<HTMLDialogElement | null>(null);
@@ -57,6 +62,14 @@ export const GamePage = () => {
     const { isAttemptValid } = await createAttempt({ targetId, x, y });
     if (isAttemptValid) {
       await refetchGame();
+    }
+  };
+
+  const setPlayerHandler: SubmitEventHandler = async (e) => {
+    e.preventDefault();
+    const success = await setPlayer(playerInput);
+    if (success) {
+      setIsPlayerSet(true);
     }
   };
 
@@ -102,12 +115,27 @@ export const GamePage = () => {
           ))}
         </ul>
       </dialog>
-      <dialog ref={resultDialogRef} aria-labelledby="result-title">
+      <dialog
+        ref={resultDialogRef}
+        aria-labelledby="result-title"
+        onCancel={(e) => e.preventDefault()}>
         <h2 id="result-title">Game result</h2>
         <div>record: {game.record}</div>
-        <form>
-          <label htmlFor="player">player</label>
-          <input type="text" name="player" id="player" />
+        <form onSubmit={setPlayerHandler}>
+          {!isPlayerSet && (
+            <>
+              <label htmlFor="player">player</label>
+              <input
+                type="text"
+                name="player"
+                id="player"
+                value={playerInput}
+                onChange={(e) => setPlayerInput(e.target.value)}
+              />
+              <button>Submit</button>
+            </>
+          )}
+          <button>New Game</button>
         </form>
       </dialog>
     </>
