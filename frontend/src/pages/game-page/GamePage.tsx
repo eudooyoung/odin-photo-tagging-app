@@ -2,7 +2,12 @@ import PuzzleImage from "@/assets/geeks_in_the_hall.png";
 import { useAttempt } from "@/hooks/useAttempt.ts";
 import { useGame } from "@/hooks/useGame.ts";
 import { coordConverter } from "@/lib/coordConverter.ts";
-import { useRef, useState, type MouseEventHandler } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type MouseEventHandler,
+} from "react";
 import { useParams } from "react-router";
 
 export const GamePage = () => {
@@ -16,6 +21,14 @@ export const GamePage = () => {
   });
   const modalRef = useRef<HTMLDialogElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
+  const resultDialogRef = useRef<HTMLDialogElement | null>(null);
+  const isGameEnded = game?.finishedAt !== null;
+
+  useEffect(() => {
+    if (isGameEnded) {
+      resultDialogRef.current?.showModal();
+    }
+  }, [isGameEnded]);
 
   const imgClickHandler: MouseEventHandler = (e) => {
     if (!imageRef.current || !modalRef.current) {
@@ -29,11 +42,8 @@ export const GamePage = () => {
     modal.showModal();
     const { width: modalWidth, height: modalHeight } =
       modal.getBoundingClientRect();
-    const left = Math.min(e.clientX - 5, window.innerWidth - modalWidth);
-    const right = Math.min(
-      e.clientY - 5,
-      window.innerHeight - modalHeight,
-    );
+    const left = Math.min(e.clientX, window.innerWidth - modalWidth);
+    const right = Math.min(e.clientY, window.innerHeight - modalHeight);
     modal.style.left = `${left}px`;
     modal.style.top = `${right}px`;
   };
@@ -91,6 +101,14 @@ export const GamePage = () => {
             </li>
           ))}
         </ul>
+      </dialog>
+      <dialog ref={resultDialogRef} aria-labelledby="result-title">
+        <h2 id="result-title">Game result</h2>
+        <div>record: {game.record}</div>
+        <form>
+          <label htmlFor="player">player</label>
+          <input type="text" name="player" id="player" />
+        </form>
       </dialog>
     </>
   );

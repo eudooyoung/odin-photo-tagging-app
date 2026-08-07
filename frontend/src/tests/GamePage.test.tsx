@@ -10,6 +10,7 @@ const { mockUseGame, defaultUseGame, mockUseAttempt, defaultUseAttempt } =
       game: {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: false }],
+        finishedAt: null as Date | null,
       },
       gameLoading: false,
       gameError: null as Error | null,
@@ -150,6 +151,7 @@ describe("game page", () => {
       game: {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: true }],
+        finishedAt: null,
       },
     });
     render(
@@ -158,5 +160,28 @@ describe("game page", () => {
       </MemoryRouter>,
     );
     expect(screen.getByTestId("target-marker-1")).toBeInTheDocument();
+  });
+
+  it("show result dialog when game ends", () => {
+    mockUseGame.mockReturnValue({
+      ...defaultUseGame,
+      game: {
+        id: "gameId",
+        targets: [{ id: 1, name: "target-1", isFound: true }],
+        finishedAt: new Date(),
+      },
+    });
+    render(
+      <MemoryRouter>
+        <GamePage />
+      </MemoryRouter>,
+    );
+
+    expect(
+      screen.getByRole("dialog", { name: /game result/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("textbox", { name: /player/i }),
+    ).toBeInTheDocument();
   });
 });
