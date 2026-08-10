@@ -71,5 +71,9 @@ export const setPlayer = [...validatePlayer, setPlayerHandler];
 
 export const getLeaderboard: RequestHandler = async (req, res) => {
   const leaderboard = await findLeaderboard();
-  res.json({ leaderboard });
+  const leaderBoardWithRanks = leaderboard.map((entry, i) => ({
+    rank: i + 1,
+    ...entry,
+  }));
+  res.json({ leaderboard: leaderBoardWithRanks });
 };

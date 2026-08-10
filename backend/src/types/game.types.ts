@@ -37,5 +37,5 @@ export type SetPlayerRequest = {
 };
 
 export type GetLeaderboardResponse = {
-  leaderboard: { player: string; record: number }[];
+  leaderboard: { rank: number; player: string; record: number }[];
 };

@@ -87,12 +87,17 @@ export const updateGameWithPlayer = async (
 
 export const findLeaderboard = async () => {
   return prisma.game.findMany({
+    where: {
+      finishedAt: {
+        not: null,
+      },
+    },
     select: {
       player: true,
       record: true,
     },
     orderBy: {
-      record: "desc",
+      record: "asc",
     },
     take: 10,
   });

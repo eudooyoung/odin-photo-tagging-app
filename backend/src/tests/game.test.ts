@@ -1,4 +1,5 @@
 import { app } from "@/app.js";
+import { prisma } from "@/lib/prisma.js";
 import { findGameById } from "@/repositories/game.repository.js";
 import {
   type CreateGameResponse,
@@ -111,9 +112,28 @@ describe("game api", () => {
   });
 
   it("get leaderboard", async () => {
+    await prisma.game.createMany({
+      data: [
+        {
+          publicId: "game-1",
+          player: "player-1",
+          finishedAt: new Date(),
+          record: 1000,
+        },
+        {
+          publicId: "game-2",
+          player: "player-2",
+          finishedAt: new Date(),
+          record: 500,
+        },
+      ],
+    });
     const res = await request(app).get("/games/leaderboard");
     const { leaderboard } = getBody<GetLeaderboardResponse>(res);
 
-    expect(Array.isArray(leaderboard)).toBe(true);
+    expect(leaderboard).toEqual([
+      { rank: 1, player: "player-2", record: 500 },
+      { rank: 2, player: "player-1", record: 1000 },
+    ]);
   });
 });
