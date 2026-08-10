@@ -2,6 +2,7 @@ import { Layout } from "@/layouts/MainLayout";
 import RootLayout from "@/layouts/RootLayout.tsx";
 import { GamePage } from "@/pages/game-page/GamePage.tsx";
 import { LandingPage } from "@/pages/landing-page/LandingPage.tsx";
+import { LeaderboardPage } from "@/pages/leaderboard-page/LeaderboardPage";
 import { createBrowserRouter, type RouteObject } from "react-router";
 
 const routes = [
@@ -17,7 +18,7 @@ const routes = [
         element: <Layout />,
         children: [
           { path: "games/:gameId", element: <GamePage /> },
-          { path: "leaderboard" },
+          { path: "leaderboard", element: <LeaderboardPage /> },
         ],
       },
     ],

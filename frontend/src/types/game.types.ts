@@ -23,4 +23,10 @@ export type AttemptResponse = {
   targetId?: number;
 };
 
-export type Leaderboard = { player: string; record: number }[];
+export type Leaderboard = LeaderboardEntry[];
+
+export type LeaderboardEntry = {
+  rank: number;
+  player: string;
+  record: number;
+};

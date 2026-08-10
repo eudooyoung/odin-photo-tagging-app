@@ -17,7 +17,9 @@ export const useLeaderboard = () => {
 
     void (async () => {
       try {
-        const response = await fetch(`${env.apiBaseURL}/leaderboard`);
+        const response = await fetch(
+          `${env.apiBaseURL}/games/leaderboard`,
+        );
 
         if (!response.ok) {
           throw new Error(`Server error: ${response.status}`);
