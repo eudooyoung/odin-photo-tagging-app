@@ -1,5 +1,5 @@
 import { LeaderboardPage } from "@/pages/leaderboard-page/LeaderboardPage";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import { describe, expect, it, vi } from "vitest";
 

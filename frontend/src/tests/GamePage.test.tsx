@@ -248,7 +248,6 @@ describe("game page", () => {
   });
 
   it("disable player submit button while loading", async () => {
-    const user = userEvent.setup();
     mockUseGame.mockReturnValue({
       ...defaultUseGame,
       game: {
@@ -269,7 +268,6 @@ describe("game page", () => {
   });
 
   it("show player error message when exists", async () => {
-    const user = userEvent.setup();
     mockUseGame.mockReturnValue({
       ...defaultUseGame,
       game: {
@@ -311,7 +309,6 @@ describe("game page", () => {
   });
 
   it("disable new game button when loading", async () => {
-    const user = userEvent.setup();
     mockUseGame.mockReturnValue({
       ...defaultUseGame,
       game: {
@@ -331,7 +328,6 @@ describe("game page", () => {
   });
 
   it("show create game error if exists", async () => {
-    const user = userEvent.setup();
     mockUseGame.mockReturnValue({
       ...defaultUseGame,
       game: {

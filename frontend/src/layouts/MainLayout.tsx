@@ -7,7 +7,7 @@ export const Layout = () => {
     <>
       <Header />
       <Main />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };
