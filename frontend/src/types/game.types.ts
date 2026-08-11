@@ -9,6 +9,10 @@ export type Game = {
     name: string;
     id: number;
     isFound: boolean;
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
   }[];
 };
 
@@ -29,4 +33,13 @@ export type LeaderboardEntry = {
   rank: number;
   player: string;
   record: number;
+};
+
+export type Target = Game["targets"][number];
+
+export type TargetPosition = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 };

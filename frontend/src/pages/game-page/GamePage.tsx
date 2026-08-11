@@ -3,15 +3,21 @@ import { useAttempt } from "@/hooks/useAttempt.ts";
 import { useCreateGame } from "@/hooks/useCreateGame.ts";
 import { useGame } from "@/hooks/useGame.ts";
 import { usePlayer } from "@/hooks/usePlayer.ts";
-import { coordConverter } from "@/lib/coordConverter.ts";
+import {
+  imageToRelativeCoords,
+  screenToImageCoords,
+} from "@/lib/coordConverters";
 import {
   useEffect,
   useRef,
   useState,
   type MouseEventHandler,
+  type ReactEventHandler,
   type SubmitEventHandler,
 } from "react";
 import { Link, useNavigate, useParams } from "react-router";
+import styles from "./GamePage.module.css";
+import type { Target, TargetPosition } from "@/types/game.types.ts";
 
 export const GamePage = () => {
   const gameId = useParams().gameId as string;
@@ -28,6 +34,10 @@ export const GamePage = () => {
   });
   const [playerInput, setPlayerInput] = useState("");
   const [isPlayerSet, setIsPlayerSet] = useState(false);
+  const [imageSize, setImageSize] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
   const modalRef = useRef<HTMLDialogElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const resultDialogRef = useRef<HTMLDialogElement | null>(null);
@@ -46,7 +56,7 @@ export const GamePage = () => {
     const image = imageRef.current;
     const modal = modalRef.current;
 
-    const { x, y } = coordConverter(e, image);
+    const { x, y } = screenToImageCoords(e, image);
     setAttemptCoord({ x, y });
     modal.showModal();
     const { width: modalWidth, height: modalHeight } =
@@ -84,6 +94,33 @@ export const GamePage = () => {
     }
   };
 
+  const imageLoadHandler: ReactEventHandler<HTMLImageElement> = (e) => {
+    setImageSize({
+      width: e.currentTarget.naturalWidth,
+      height: e.currentTarget.naturalHeight,
+    });
+  };
+
+  const renderMarker = (target: Target) => {
+    const { x, y, width, height } = target as TargetPosition;
+    const position = imageSize
+      ? imageToRelativeCoords({ x, y, width, height }, imageSize)
+      : undefined;
+    return (
+      <div
+        key={target.id}
+        data-testid={`target-marker-${target.id}`}
+        className={styles.marker}
+        style={
+          position && {
+            left: `${position.left}%`,
+            top: `${position.top}%`,
+            width: `${position.width}%`,
+          }
+        }
+      />
+    );
+  };
   if (gameLoading) {
     return <>game loading...</>;
   }
@@ -93,24 +130,21 @@ export const GamePage = () => {
   }
 
   return (
-    <>
+    <main className={styles.main}>
       <h2 hidden>Game Page</h2>
       {gameError && gameError.message}
-      <div>
+      <div className={styles.imageWrapper}>
         <img
           src={PuzzleImage}
           alt="puzzle image"
           onMouseDown={imgClickHandler}
           ref={imageRef}
+          className={styles.puzzleImage}
+          onLoad={imageLoadHandler}
         />
         {game.targets
           .filter((target) => target.isFound)
-          .map((target) => (
-            <div
-              key={target.id}
-              data-testid={`target-marker-${target.id}`}
-            />
-          ))}
+          .map(renderMarker)}
       </div>
       <dialog ref={modalRef} closedby="any">
         <ul>
@@ -154,6 +188,6 @@ export const GamePage = () => {
           <Link to={"/leaderboard"}>See leaderboard</Link>
         </form>
       </dialog>
-    </>
+    </main>
   );
 };

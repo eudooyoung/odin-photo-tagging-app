@@ -1,4 +1,4 @@
-import { Layout } from "@/layouts/MainLayout";
+import { MainLayout } from "@/layouts/main-layout/MainLayout";
 import RootLayout from "@/layouts/RootLayout.tsx";
 import { GamePage } from "@/pages/game-page/GamePage.tsx";
 import { LandingPage } from "@/pages/landing-page/LandingPage.tsx";
@@ -15,7 +15,7 @@ const routes = [
         element: <LandingPage />,
       },
       {
-        element: <Layout />,
+        element: <MainLayout />,
         children: [
           { path: "games/:gameId", element: <GamePage /> },
           { path: "leaderboard", element: <LeaderboardPage /> },

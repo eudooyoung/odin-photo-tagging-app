@@ -1,0 +1,28 @@
+.main {
+  /* max-height: calc(100dvh - var(--size-12)); */
+  display: flex;
+}
+
+.imageWrapper {
+  /* background-color: var(--gray-300); */
+  /* border: var(--size-2) solid var(--gray-700); */
+  /* border-left: var(--size-2) solid var(--gray-500); */
+  /* border-right: var(--size-2) solid var(--gray-500); */
+
+  /* display: flex; */
+  /* justify-content: center; */
+  position: relative;
+}
+
+.puzzleImage {
+  /* height: 100%; */
+  /* object-fit: contain; */
+  /* border-radius: var(--radius-lg); */
+}
+
+.marker {
+  position: absolute;
+  border: var(--size-2) solid var(--red-500);
+  border-radius: var(--radius-full);
+  aspect-ratio: 1;
+}
