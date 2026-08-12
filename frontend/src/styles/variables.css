@@ -112,7 +112,8 @@
   /* overlay */
   --hero-overlay: hsl(0 0% 0%/70%);
   --hero-content-overlay: hsl(150 10% 82%/80%);
-  --marker-overlay: hsl(215 55% 18%/35%);
+  --dialog-backdrop-overlay: hsl(150 10% 13%/30%);
+  --marker-overlay: hsl(215 55% 18%/50%);
 
   /* radius */
   --radius-sm: 0.25rem;

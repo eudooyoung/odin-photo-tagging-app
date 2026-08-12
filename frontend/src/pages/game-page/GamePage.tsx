@@ -63,8 +63,8 @@ export const GamePage = () => {
       modal.getBoundingClientRect();
     const left = Math.min(e.clientX, window.innerWidth - modalWidth);
     const right = Math.min(e.clientY, window.innerHeight - modalHeight);
-    modal.style.left = `${left}px`;
-    modal.style.top = `${right}px`;
+    modal.style.left = `${left - 5}px`;
+    modal.style.top = `${right - 5}px`;
   };
 
   const createAttemptHandler = (targetId: number) => async () => {
@@ -77,6 +77,8 @@ export const GamePage = () => {
     if (isAttemptValid) {
       await refetchGame();
     }
+
+    modalRef.current?.close();
   };
 
   const setPlayerHandler: SubmitEventHandler = async (e) => {
@@ -121,7 +123,7 @@ export const GamePage = () => {
       />
     );
   };
-  if (gameLoading) {
+  if (!game && gameLoading) {
     return <>game loading...</>;
   }
 
@@ -146,13 +148,17 @@ export const GamePage = () => {
           .filter((target) => target.isFound)
           .map(renderMarker)}
       </div>
-      <dialog ref={modalRef} closedby="any">
-        <ul>
+      <dialog
+        ref={modalRef}
+        closedby="any"
+        className={styles.attemptDialog}>
+        <ul className={styles.targetList}>
           {game.targets.map((target) => (
-            <li key={target.id}>
+            <li className={styles.targetListItem} key={target.id}>
               <button
                 onClick={createAttemptHandler(target.id)}
-                disabled={attemptLoading}>
+                disabled={attemptLoading || target.isFound}
+                className={`${styles.targetAttemptButton} ${target.isFound ? styles.found : ""}`}>
                 {target.name}
               </button>
               {attemptError && <>{attemptError.message}</>}
