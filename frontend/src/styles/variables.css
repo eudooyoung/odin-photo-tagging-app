@@ -85,6 +85,18 @@
   --yellow-700: hsl(36, 80%, 36%);
   --yellow-900: hsl(32, 65%, 22%);
 
+  /* accent blue */
+  --blue-50: hsl(215, 60%, 97%);
+  --blue-100: hsl(215, 60%, 92%);
+  --blue-200: hsl(215, 60%, 84%);
+  --blue-300: hsl(215, 60%, 72%);
+  --blue-400: hsl(215, 65%, 60%);
+  --blue-500: hsl(215, 70%, 50%);
+  --blue-600: hsl(215, 72%, 42%);
+  --blue-700: hsl(215, 70%, 34%);
+  --blue-800: hsl(215, 65%, 26%);
+  --blue-900: hsl(215, 55%, 18%);
+
   /* shadow */
   --shadow-sm: 0 1px 2px hsl(150 15% 13% / 0.08);
 
@@ -100,6 +112,7 @@
   /* overlay */
   --hero-overlay: hsl(0 0% 0%/70%);
   --hero-content-overlay: hsl(150 10% 82%/80%);
+  --marker-overlay: hsl(215 55% 18%/35%);
 
   /* radius */
   --radius-sm: 0.25rem;

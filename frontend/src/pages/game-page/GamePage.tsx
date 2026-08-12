@@ -4,7 +4,7 @@ import { useCreateGame } from "@/hooks/useCreateGame.ts";
 import { useGame } from "@/hooks/useGame.ts";
 import { usePlayer } from "@/hooks/usePlayer.ts";
 import {
-  imageToRelativeCoords,
+  imageToRelativeMarkerCoords,
   screenToImageCoords,
 } from "@/lib/coordConverters";
 import {
@@ -104,7 +104,7 @@ export const GamePage = () => {
   const renderMarker = (target: Target) => {
     const { x, y, width, height } = target as TargetPosition;
     const position = imageSize
-      ? imageToRelativeCoords({ x, y, width, height }, imageSize)
+      ? imageToRelativeMarkerCoords({ x, y, width, height }, imageSize)
       : undefined;
     return (
       <div
@@ -115,7 +115,7 @@ export const GamePage = () => {
           position && {
             left: `${position.left}%`,
             top: `${position.top}%`,
-            width: `${position.width}%`,
+            width: `${position.diameter}%`,
           }
         }
       />

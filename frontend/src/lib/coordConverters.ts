@@ -16,15 +16,19 @@ export const screenToImageCoords = (
   return { x: imageX, y: imageY };
 };
 
-export const imageToRelativeCoords = (
+export const imageToRelativeMarkerCoords = (
   targetPosition: TargetPosition,
   imageSize: { width: number; height: number },
 ) => {
   const { width, height } = imageSize;
+  const { x: tX, y: tY, width: tW, height: tH } = targetPosition;
+  const diameter = Math.hypot(tW, tH);
+  const centerX = tX + tW / 2 - diameter / 2;
+  const centerY = tY + tH / 2 - diameter / 2;
+
   return {
-    left: (targetPosition.x / width) * 100,
-    top: (targetPosition.y / height) * 100,
-    width: (targetPosition.width / width) * 100,
-    height: (targetPosition.height / height) * 100,
+    left: (centerX / width) * 100,
+    top: (centerY / height) * 100,
+    diameter: (diameter / width) * 100,
   };
 };

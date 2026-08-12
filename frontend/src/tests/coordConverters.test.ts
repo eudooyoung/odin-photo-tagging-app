@@ -1,5 +1,5 @@
 import {
-  imageToRelativeCoords,
+  imageToRelativeMarkerCoords,
   screenToImageCoords,
 } from "@/lib/coordConverters";
 import type { MouseEvent } from "react";
@@ -78,7 +78,7 @@ describe("coordConverters", () => {
       };
 
       const imageSize = { width: 500, height: 500 };
-      const result = imageToRelativeCoords(
+      const result = imageToRelativeMarkerCoords(
         {
           x: originalX,
           y: originalY,
@@ -88,12 +88,9 @@ describe("coordConverters", () => {
         imageSize,
       );
 
-      expect(result).toEqual({
-        left: 20,
-        top: 10,
-        width: 6,
-        height: 3,
-      });
+      expect(result.left).toBeCloseTo(19.65);
+      expect(result.top).toBeCloseTo(8.15);
+      expect(result.diameter).toBeCloseTo(6.71);
     });
   });
 });
