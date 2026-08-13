@@ -57,3 +57,7 @@
   background-color: inherit;
   cursor: default;
 }
+
+.resultDialog {
+  margin: auto;
+}

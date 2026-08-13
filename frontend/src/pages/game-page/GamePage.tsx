@@ -19,6 +19,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import styles from "./GamePage.module.css";
 import type { Target, TargetPosition } from "@/types/game.types.ts";
 import HandDrwanCircle from "@/assets/hand-drawn-circle.svg?react";
+import { recordConverter } from "@/lib/recordConverter.ts";
 
 export const GamePage = () => {
   const gameId = useParams().gameId as string;
@@ -42,7 +43,8 @@ export const GamePage = () => {
   const modalRef = useRef<HTMLDialogElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const resultDialogRef = useRef<HTMLDialogElement | null>(null);
-  const isGameEnded = game?.finishedAt !== null;
+  const isGameEnded = game?.record !== null;
+  const record = game?.record && recordConverter(game.record);
 
   useEffect(() => {
     if (isGameEnded) {
@@ -172,9 +174,14 @@ export const GamePage = () => {
       <dialog
         ref={resultDialogRef}
         aria-labelledby="result-title"
-        onCancel={(e) => e.preventDefault()}>
+        onCancel={(e) => e.preventDefault()}
+        className={styles.resultDialog}>
         <h2 id="result-title">Game result</h2>
-        <div>record: {game.record}</div>
+        <div>
+          record:{" "}
+          {record &&
+            `${record.hours}:${record.minutes}:${record.seconds}.${record.milliseconds}`}
+        </div>
         <form onSubmit={setPlayerHandler}>
           {!isPlayerSet && (
             <>
@@ -194,8 +201,8 @@ export const GamePage = () => {
           </button>
           {playerError && <>{playerError.message}</>}
           {createGameError && <>{createGameError.message}</>}
-          <Link to={"/leaderboard"}>See leaderboard</Link>
         </form>
+        <Link to={"/leaderboard"}>See leaderboard</Link>
       </dialog>
     </main>
   );

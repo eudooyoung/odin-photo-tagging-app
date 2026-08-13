@@ -19,7 +19,7 @@ const {
     game: {
       id: "gameId",
       targets: [{ id: 1, name: "target-1", isFound: false }],
-      finishedAt: null as Date | null,
+      record: null as number | null,
     },
     gameLoading: false,
     gameError: null as Error | null,
@@ -96,6 +96,12 @@ describe("game page", () => {
     ) {
       this.open = true;
     });
+
+    HTMLDialogElement.prototype.close = vi.fn(function (
+      this: HTMLDialogElement,
+    ) {
+      this.open = false;
+    });
   });
 
   it("click picture shows targets", async () => {
@@ -114,6 +120,7 @@ describe("game page", () => {
   it("show game loading while fetching game", () => {
     mockUseGame.mockReturnValue({
       ...defaultUseGame,
+      game: null!,
       gameLoading: true,
     });
     renderGamePage();
@@ -182,7 +189,7 @@ describe("game page", () => {
       game: {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: true }],
-        finishedAt: null,
+        record: null,
       },
     });
     renderGamePage();
@@ -195,7 +202,7 @@ describe("game page", () => {
       game: {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: true }],
-        finishedAt: new Date(),
+        record: 13_358_792,
       },
     });
     renderGamePage();
@@ -203,6 +210,7 @@ describe("game page", () => {
     expect(
       screen.getByRole("dialog", { name: /game result/i }),
     ).toBeInTheDocument();
+    expect(screen.getByText(/3:42:38.792/i)).toBeInTheDocument();
     expect(
       screen.getByRole("textbox", { name: /player/i }),
     ).toBeInTheDocument();
@@ -226,7 +234,7 @@ describe("game page", () => {
       game: {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: true }],
-        finishedAt: new Date(),
+        record: 123,
       },
     });
     const mockSetPlayer = vi.fn().mockResolvedValue(true);
@@ -253,7 +261,7 @@ describe("game page", () => {
       game: {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: true }],
-        finishedAt: new Date(),
+        record: 123,
       },
     });
     mockUsePlayer.mockReturnValue({
@@ -273,7 +281,7 @@ describe("game page", () => {
       game: {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: true }],
-        finishedAt: new Date(),
+        record: 123,
       },
     });
     mockUsePlayer.mockReturnValue({
@@ -292,7 +300,7 @@ describe("game page", () => {
       game: {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: true }],
-        finishedAt: new Date(),
+        record: 123,
       },
     });
     const mockCreateGame = vi.fn().mockResolvedValue("newGameId");
@@ -314,7 +322,7 @@ describe("game page", () => {
       game: {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: true }],
-        finishedAt: new Date(),
+        record: 123,
       },
     });
     mockUseCreateGame.mockReturnValue({
@@ -333,7 +341,7 @@ describe("game page", () => {
       game: {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: true }],
-        finishedAt: new Date(),
+        record: 123,
       },
     });
     mockUseCreateGame.mockReturnValue({
