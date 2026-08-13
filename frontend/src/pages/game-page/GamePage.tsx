@@ -43,7 +43,8 @@ export const GamePage = () => {
   const modalRef = useRef<HTMLDialogElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const resultDialogRef = useRef<HTMLDialogElement | null>(null);
-  const isGameEnded = game?.record !== null;
+  const isGameEnded = game?.record != null;
+  console.log(isGameEnded);
   const record = game?.record && recordConverter(game.record);
 
   useEffect(() => {
@@ -95,6 +96,10 @@ export const GamePage = () => {
   const newGameHandler = async () => {
     const gameId = await createGame();
     if (gameId) {
+      setPlayerInput("");
+      setIsPlayerSet(false);
+      setAttemptCoord({ x: -1, y: -1 });
+      resultDialogRef.current?.close();
       navigate(`/games/${gameId}`);
     }
   };
@@ -138,8 +143,8 @@ export const GamePage = () => {
 
   return (
     <main className={styles.main}>
-      <h2 hidden>Game Page</h2>
-      {gameError && gameError.message}
+      <h2 className={styles.visuallyHidden}>Game Page</h2>
+      <p className={styles.error}>{gameError && gameError.message}</p>
       <div className={styles.imageWrapper}>
         <img
           src={PuzzleImage}
@@ -176,22 +181,28 @@ export const GamePage = () => {
         aria-labelledby="result-title"
         onCancel={(e) => e.preventDefault()}
         className={styles.resultDialog}>
-        <h2 id="result-title">Game result</h2>
-        <div>
-          record:{" "}
+        <h2 id="result-title" className={styles.resultTitle}>
+          Game result
+        </h2>
+        <div className={styles.record}>
+          Record:{" "}
           {record &&
             `${record.hours}:${record.minutes}:${record.seconds}.${record.milliseconds}`}
         </div>
-        <form onSubmit={setPlayerHandler}>
+        <form onSubmit={setPlayerHandler} className={styles.playerForm}>
           {!isPlayerSet && (
             <>
-              <label htmlFor="player">player</label>
+              <label
+                className={styles.visuallyHidden}
+                htmlFor="player"></label>
               <input
                 type="text"
                 name="player"
                 id="player"
                 value={playerInput}
                 onChange={(e) => setPlayerInput(e.target.value)}
+                placeholder="Enter player name"
+                className={styles.playerInput}
               />
               <button disabled={playerLoading}>Submit</button>
             </>
@@ -199,10 +210,16 @@ export const GamePage = () => {
           <button onClick={newGameHandler} disabled={createGameLoading}>
             New Game
           </button>
-          {playerError && <>{playerError.message}</>}
-          {createGameError && <>{createGameError.message}</>}
+          {playerError && (
+            <p className={styles.error}>{playerError.message}</p>
+          )}
+          {createGameError && (
+            <p className={styles.error}>{createGameError.message}</p>
+          )}
         </form>
-        <Link to={"/leaderboard"}>See leaderboard</Link>
+        <Link className={styles.leaderboardLink} to={"/leaderboard"}>
+          See leaderboard
+        </Link>
       </dialog>
     </main>
   );
