@@ -18,6 +18,7 @@ import {
 import { Link, useNavigate, useParams } from "react-router";
 import styles from "./GamePage.module.css";
 import type { Target, TargetPosition } from "@/types/game.types.ts";
+import HandDrwanCircle from "@/assets/hand-drawn-circle.svg?react";
 
 export const GamePage = () => {
   const gameId = useParams().gameId as string;
@@ -109,7 +110,19 @@ export const GamePage = () => {
       ? imageToRelativeMarkerCoords({ x, y, width, height }, imageSize)
       : undefined;
     return (
-      <div
+      // <div
+      //   key={target.id}
+      //   data-testid={`target-marker-${target.id}`}
+      //   className={styles.marker}
+      //   style={
+      //     position && {
+      //       left: `${position.left}%`,
+      //       top: `${position.top}%`,
+      //       width: `${position.diameter}%`,
+      //     }
+      //   }
+      // />
+      <HandDrwanCircle
         key={target.id}
         data-testid={`target-marker-${target.id}`}
         className={styles.marker}
@@ -118,11 +131,13 @@ export const GamePage = () => {
             left: `${position.left}%`,
             top: `${position.top}%`,
             width: `${position.diameter}%`,
+            height: `${position.diameter}%`,
           }
         }
       />
     );
   };
+
   if (!game && gameLoading) {
     return <>game loading...</>;
   }
