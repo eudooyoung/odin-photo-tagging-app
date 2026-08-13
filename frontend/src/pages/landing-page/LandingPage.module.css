@@ -64,7 +64,6 @@
 }
 
 .heroError {
-  /* flex-shrink: 1; */
   min-height: var(--size-6);
   color: var(--red-700);
 }

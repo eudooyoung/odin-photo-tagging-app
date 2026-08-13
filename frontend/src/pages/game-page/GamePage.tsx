@@ -110,18 +110,6 @@ export const GamePage = () => {
       ? imageToRelativeMarkerCoords({ x, y, width, height }, imageSize)
       : undefined;
     return (
-      // <div
-      //   key={target.id}
-      //   data-testid={`target-marker-${target.id}`}
-      //   className={styles.marker}
-      //   style={
-      //     position && {
-      //       left: `${position.left}%`,
-      //       top: `${position.top}%`,
-      //       width: `${position.diameter}%`,
-      //     }
-      //   }
-      // />
       <HandDrwanCircle
         key={target.id}
         data-testid={`target-marker-${target.id}`}
