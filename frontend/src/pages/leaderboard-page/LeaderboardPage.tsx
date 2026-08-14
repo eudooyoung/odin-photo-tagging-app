@@ -1,4 +1,6 @@
 import { useLeaderboard } from "@/hooks/useLeaderboard.ts";
+import styles from "./LeaderboardPage.module.css";
+import { formatRecord } from "@/lib/formatRecord";
 
 export const LeaderboardPage = () => {
   const { leaderboard, leaderboardError, leaderboardLoading } =
@@ -9,28 +11,47 @@ export const LeaderboardPage = () => {
   }
 
   return (
-    <>
-      {leaderboardError && <>{leaderboardError.message}</>}
-      <table>
-        <caption>leaderboard</caption>
+    <main className={styles.main}>
+      <table className={styles.leaderboard}>
+        <caption className={styles.caption}>Leaderboard</caption>
+        {leaderboardError && <p>{leaderboardError.message}</p>}
+        <colgroup>
+          <col className={styles.rankCol} />
+          <col className={styles.playerCol} />
+          <col className={styles.recordCol} />
+        </colgroup>
         <thead>
           <tr>
-            <th scope="col">Ranking</th>
-            <th scope="col">Player</th>
-            <th scope="col">Record</th>
+            <th className={styles.colHeader} scope="col">
+              Ranking
+            </th>
+            <th className={styles.colHeader} scope="col">
+              Player
+            </th>
+            <th className={styles.colHeader} scope="col">
+              Record
+            </th>
           </tr>
         </thead>
         <tbody>
           {leaderboard &&
-            leaderboard.map((entry) => (
-              <tr key={entry.rank}>
-                <th scope="row">{entry.rank}</th>
-                <td>{entry.player}</td>
-                <td>{entry.record}</td>
-              </tr>
-            ))}
+            leaderboard.map((entry) => {
+              const record = formatRecord(entry.record);
+              return (
+                <tr key={entry.rank}>
+                  <th className={styles.rankCell} scope="row">
+                    {entry.rank}
+                  </th>
+                  <td className={styles.playerCell}>{entry.player}</td>
+                  <td
+                    className={
+                      styles.recordCell
+                    }>{`${record.hours}:${record.minutes}:${record.seconds}.${record.milliseconds}`}</td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
-    </>
+    </main>
   );
 };

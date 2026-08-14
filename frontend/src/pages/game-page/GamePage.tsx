@@ -19,7 +19,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import styles from "./GamePage.module.css";
 import type { Target, TargetPosition } from "@/types/game.types.ts";
 import HandDrwanCircle from "@/assets/hand-drawn-circle.svg?react";
-import { recordConverter } from "@/lib/recordConverter.ts";
+import { formatRecord } from "@/lib/formatRecord";
 
 export const GamePage = () => {
   const gameId = useParams().gameId as string;
@@ -44,7 +44,7 @@ export const GamePage = () => {
   const imageRef = useRef<HTMLImageElement | null>(null);
   const resultDialogRef = useRef<HTMLDialogElement | null>(null);
   const isGameEnded = game?.record != null;
-  const record = game?.record && recordConverter(game.record);
+  const record = game?.record && formatRecord(game.record);
 
   useEffect(() => {
     if (isGameEnded) {
