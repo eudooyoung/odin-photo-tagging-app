@@ -1,7 +1,8 @@
 import { GamePage } from "@/pages/game-page/GamePage.tsx";
+import { GameRouter } from "@/routes/GameRouter.tsx";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter } from "react-router";
+import { MemoryRouter, Route, Routes } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const {
@@ -20,6 +21,7 @@ const {
       id: "gameId",
       targets: [{ id: 1, name: "target-1", isFound: false }],
       record: null as number | null,
+      player: null as string | null,
     },
     gameLoading: false,
     gameError: null as Error | null,
@@ -83,8 +85,12 @@ vi.mock("react-router", async () => {
 
 const renderGamePage = () => {
   render(
-    <MemoryRouter>
-      <GamePage />
+    <MemoryRouter initialEntries={["/games/gameId"]}>
+      <Routes>
+        <Route path="games/:gameId" element={<GameRouter />}>
+          <Route index element={<GamePage />} />
+        </Route>
+      </Routes>
     </MemoryRouter>,
   );
 };
@@ -106,11 +112,7 @@ describe("game page", () => {
 
   it("click picture shows targets", async () => {
     const user = userEvent.setup();
-    render(
-      <MemoryRouter>
-        <GamePage />,
-      </MemoryRouter>,
-    );
+    renderGamePage();
 
     const puzzleImage = screen.getByRole("img", { name: /puzzle/i });
     await user.click(puzzleImage);
@@ -190,6 +192,7 @@ describe("game page", () => {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: true }],
         record: null,
+        player: null,
       },
     });
     renderGamePage();
@@ -203,6 +206,7 @@ describe("game page", () => {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: true }],
         record: 13_358_792,
+        player: null,
       },
     });
     renderGamePage();
@@ -210,7 +214,7 @@ describe("game page", () => {
     expect(
       screen.getByRole("dialog", { name: /game result/i }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/3:42:38.792/i)).toBeInTheDocument();
+    expect(screen.getByText(/03:42:38.792/i)).toBeInTheDocument();
     expect(
       screen.getByRole("textbox", { name: /player/i }),
     ).toBeInTheDocument();
@@ -235,6 +239,7 @@ describe("game page", () => {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: true }],
         record: 123,
+        player: null,
       },
     });
     const mockSetPlayer = vi.fn().mockResolvedValue(true);
@@ -262,6 +267,7 @@ describe("game page", () => {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: true }],
         record: 123,
+        player: null,
       },
     });
     mockUsePlayer.mockReturnValue({
@@ -282,6 +288,7 @@ describe("game page", () => {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: true }],
         record: 123,
+        player: null,
       },
     });
     mockUsePlayer.mockReturnValue({
@@ -301,6 +308,7 @@ describe("game page", () => {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: true }],
         record: 123,
+        player: "player",
       },
     });
     const mockCreateGame = vi.fn().mockResolvedValue("newGameId");
@@ -323,6 +331,7 @@ describe("game page", () => {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: true }],
         record: 123,
+        player: "player",
       },
     });
     mockUseCreateGame.mockReturnValue({
@@ -342,6 +351,7 @@ describe("game page", () => {
         id: "gameId",
         targets: [{ id: 1, name: "target-1", isFound: true }],
         record: 123,
+        player: "player",
       },
     });
     mockUseCreateGame.mockReturnValue({

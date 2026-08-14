@@ -1,0 +1,63 @@
+.resultDialog[open] {
+  margin: auto;
+  width: var(--size-96);
+  height: var(--size-96);
+  background-color: var(--gray-300);
+  border: none;
+  border-radius: var(--radius-md);
+  text-align: center;
+  box-shadow: var(--shadow-xl);
+
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--size-6);
+}
+
+.resultTitle {
+  color: var(--gray-900);
+  font-size: var(--text-3xl);
+}
+
+.playerForm {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--size-6);
+  justify-content: center;
+}
+
+.playerForm > * {
+  flex-basis: var(--size-8);
+}
+
+.playerInput {
+  border-radius: var(--radius-md);
+  border: none;
+  color: var(--gray-900);
+}
+
+.playerInput:focus {
+  outline: 2px solid var(--gray-600);
+}
+
+.resultDialog button {
+  border-radius: var(--radius-md);
+  color: var(--gray-900);
+  font-weight: var(--weight-medium);
+}
+
+.resultDialog button:hover {
+  background-color: var(--gray-600);
+  color: var(--gray-100);
+}
+
+.record {
+  color: var(--gray-800);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+}
+
+.leaderboardLink {
+  color: var(--gray-700);
+  font-weight: var(--weight-medium);
+}
