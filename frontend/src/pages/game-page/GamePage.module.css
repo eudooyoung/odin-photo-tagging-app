@@ -9,7 +9,7 @@
 
 .marker {
   position: absolute;
-  fill: var(--blue-50);
+  fill: var(--gray-900);
 }
 
 .attemptDialog {

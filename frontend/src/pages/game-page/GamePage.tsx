@@ -44,7 +44,6 @@ export const GamePage = () => {
   const imageRef = useRef<HTMLImageElement | null>(null);
   const resultDialogRef = useRef<HTMLDialogElement | null>(null);
   const isGameEnded = game?.record != null;
-  console.log(isGameEnded);
   const record = game?.record && recordConverter(game.record);
 
   useEffect(() => {
