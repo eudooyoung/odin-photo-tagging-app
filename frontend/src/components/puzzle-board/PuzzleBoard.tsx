@@ -1,5 +1,4 @@
 import PuzzleImage from "@/assets/geeks_in_the_hall.png";
-import { useOutletContext } from "react-router";
 import styles from "./PuzzleBoard.module.css";
 import {
   useState,
@@ -12,20 +11,19 @@ import {
 } from "@/lib/coordConverters.ts";
 import type { Target, TargetPosition } from "@/types/game.types.ts";
 import HandDrwanCircle from "@/assets/hand-drawn-circle.svg?react";
-import type { GameOutletContext } from "@/types/routes.types.ts";
 import type { PuzzleBoardProps } from "@/types/props.types.ts";
 
 export const PuzzleBoard = ({
+  game,
   imageRef,
   attemptDialogRef,
   setAttemptCoord,
 }: PuzzleBoardProps) => {
-  const { game, gameError } = useOutletContext<GameOutletContext>();
-
   const [imageSize, setImageSize] = useState<{
     width: number;
     height: number;
   } | null>(null);
+  const [zoom, setZoom] = useState(1);
 
   const imgClickHandler: MouseEventHandler = (e) => {
     if (!imageRef.current || !attemptDialogRef.current) {
@@ -74,18 +72,41 @@ export const PuzzleBoard = ({
     );
   };
 
+  const zoomInHandler = () => {
+    setZoom((prev) => prev * 1.1);
+  };
+
+  const zoomOutHandler = () => {
+    setZoom((prev) => prev / 1.1);
+  };
+
   return (
-    <div className={styles.imageWrapper}>
-      <p className="error">{gameError && gameError.message}</p>
-      <img
-        src={PuzzleImage}
-        alt="puzzle image"
-        onMouseDown={imgClickHandler}
-        ref={imageRef}
-        className={styles.puzzleImage}
-        onLoad={imageLoadHandler}
-      />
-      {game.targets.filter((target) => target.isFound).map(renderMarker)}
+    <div className={styles.board}>
+      <div className={styles.viewPort}>
+        <div
+          style={{ width: `${zoom * 100}%` }}
+          className={styles.imageWrapper}>
+          <img
+            src={PuzzleImage}
+            alt="puzzle image"
+            onMouseDown={imgClickHandler}
+            ref={imageRef}
+            onLoad={imageLoadHandler}
+            className={styles.puzzleImage}
+          />
+          {game.targets
+            .filter((target) => target.isFound)
+            .map(renderMarker)}
+        </div>
+      </div>
+      <div className={styles.zoomButtons}>
+        <button onClick={zoomInHandler} className={styles.zoomInButton}>
+          Zoom in
+        </button>
+        <button onClick={zoomOutHandler} className={styles.zoomOutButton}>
+          Zoom out
+        </button>
+      </div>
     </div>
   );
 };

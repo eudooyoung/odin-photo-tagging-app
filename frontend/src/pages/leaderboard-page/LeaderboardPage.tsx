@@ -12,9 +12,9 @@ export const LeaderboardPage = () => {
 
   return (
     <main className={styles.main}>
+      {leaderboardError && <p>{leaderboardError.message}</p>}
       <table className={styles.leaderboard}>
         <caption className={styles.caption}>Leaderboard</caption>
-        {leaderboardError && <p>{leaderboardError.message}</p>}
         <colgroup>
           <col className={styles.rankCol} />
           <col className={styles.playerCol} />

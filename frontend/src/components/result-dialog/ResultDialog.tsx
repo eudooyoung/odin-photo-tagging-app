@@ -1,16 +1,19 @@
-import { Link, useNavigate, useOutletContext } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import styles from "./ResultDialog.module.css";
 import { formatRecord } from "@/lib/formatRecord.ts";
 import { useEffect, useState, type SubmitEventHandler } from "react";
 import { useCreateGame } from "@/hooks/useCreateGame.ts";
-import type { GameOutletContext } from "@/types/routes.types.ts";
 import type { ResultDialogProps } from "@/types/props.types.ts";
+import { usePlayer } from "@/hooks/usePlayer.ts";
 
-export const ResultDialog = ({ resultDialogRef }: ResultDialogProps) => {
+export const ResultDialog = ({
+  game,
+  resultDialogRef,
+}: ResultDialogProps) => {
+  const gameId = useParams().gameId as string;
   const { createGame, createGameError, createGameLoading } =
     useCreateGame();
-  const { game, setPlayer, playerLoading, playerError } =
-    useOutletContext<GameOutletContext>();
+  const { setPlayer, playerError, playerLoading } = usePlayer(gameId);
   const navigate = useNavigate();
   const [playerInput, setPlayerInput] = useState("");
   const [isPlayerSet, setIsPlayerSet] = useState(game.player !== null);
@@ -74,11 +77,9 @@ export const ResultDialog = ({ resultDialogRef }: ResultDialogProps) => {
         <button onClick={newGameHandler} disabled={createGameLoading}>
           New Game
         </button>
-        {playerError && (
-          <p className={styles.error}>{playerError.message}</p>
-        )}
+        {playerError && <p className="error">{playerError.message}</p>}
         {createGameError && (
-          <p className={styles.error}>{createGameError.message}</p>
+          <p className="error">{createGameError.message}</p>
         )}
       </form>
       <Link className={styles.leaderboardLink} to={"/leaderboard"}>

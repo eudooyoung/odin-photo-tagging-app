@@ -1,20 +1,18 @@
-import { useOutletContext } from "react-router";
+import { useParams } from "react-router";
 import styles from "./AttemptDialog.module.css";
-import type { GameOutletContext } from "@/types/routes.types.ts";
 import type { AttemptDialogProps } from "@/types/props.types.ts";
+import { useAttempt } from "@/hooks/useAttempt.ts";
 
 export const AttemptDialog = ({
+  game,
+  refetchGame,
   imageRef,
   attemptDialogRef,
   attemptCoord,
 }: AttemptDialogProps) => {
-  const {
-    game,
-    refetchGame,
-    createAttempt,
-    attemptLoading,
-    attemptError,
-  } = useOutletContext<GameOutletContext>();
+  const gameId = useParams().gameId as string;
+  const { createAttempt, attemptError, attemptLoading } =
+    useAttempt(gameId);
 
   const createAttemptHandler = (targetId: number) => async () => {
     if (!imageRef.current) {
