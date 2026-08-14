@@ -8,9 +8,19 @@
   margin: 0;
 }
 
+html {
+  scrollbar-width: none;
+}
+
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  font-family: var(--font-body);
+}
+
+h1,
+h2 {
+  font-family: var(--font-display);
 }
 
 img,
@@ -27,4 +37,16 @@ button,
 textarea,
 select {
   font: inherit;
+}
+
+button {
+  border: none;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
 }

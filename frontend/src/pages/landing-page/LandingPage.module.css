@@ -7,16 +7,63 @@
 .content {
   flex: 1;
   background-image:
-    /* linear-gradient(var(--overlay), var(--overlay)), */ url("../../assets/geeks_in_the_hall.png");
-  /* background-size: cover; */
-  /* background-position: center; */
-  /* background-repeat: no-repeat; */
+    linear-gradient(var(--hero-overlay), var(--hero-overlay)),
+    url("../../assets/geeks_in_the_hall.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
   display: grid;
   place-content: center;
+  grid-template-columns: var(--size-128);
+  grid-template-rows: var(--size-96);
 }
 
 .heroContent {
-  background: white;
-  text-align: center;
+  background-color: var(--hero-content-overlay);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: var(--size-6);
+  align-items: center;
+}
+
+.heroTitle {
+  font-size: var(--text-7xl);
+  color: var(--green-900);
+}
+
+.heroButton {
+  background-color: var(--gray-700);
+  padding: var(--size-2) var(--size-16);
+  border-radius: var(--radius-xl);
+
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  color: var(--gray-100);
+
+  transition: none;
+}
+
+.heroButton:hover {
+  background-color: var(--gray-800);
+  transition: background-color 120ms ease-in-out;
+}
+
+.heroButton:active {
+  background-color: var(--gray-600);
+  transition: none;
+}
+
+.heroLink {
+  color: var(--gray-700);
+  font-weight: var(--weight-normal);
+}
+
+.heroError {
+  min-height: var(--size-6);
+  color: var(--red-700);
 }

@@ -1,0 +1,354 @@
+import { GamePage } from "@/pages/game-page/GamePage.tsx";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const {
+  mockUseGame,
+  defaultUseGame,
+  mockUseAttempt,
+  defaultUseAttempt,
+  mockUsePlayer,
+  defaultUsePlayer,
+  mockUseCreateGame,
+  defaultUseCreateGame,
+  mockNavigate,
+} = vi.hoisted(() => {
+  const defaultUseGame = {
+    game: {
+      id: "gameId",
+      targets: [{ id: 1, name: "target-1", isFound: false }],
+      record: null as number | null,
+    },
+    gameLoading: false,
+    gameError: null as Error | null,
+    refetchGame: vi.fn(),
+  };
+
+  const defaultUseAttempt = {
+    createAttempt: vi.fn(),
+    attemptError: null as Error | null,
+    attemptLoading: false,
+  };
+
+  const defaultUsePlayer = {
+    setPlayer: vi.fn(),
+    playerError: null as Error | null,
+    playerLoading: false,
+  };
+
+  const defaultUseCreateGame = {
+    createGame: vi.fn(),
+    createGameError: null as Error | null,
+    createGameLoading: false,
+  };
+
+  return {
+    mockUseGame: vi.fn(() => defaultUseGame),
+    defaultUseGame,
+    mockUseAttempt: vi.fn(() => defaultUseAttempt),
+    defaultUseAttempt,
+    mockUsePlayer: vi.fn(() => defaultUsePlayer),
+    defaultUsePlayer,
+    mockUseCreateGame: vi.fn(() => defaultUseCreateGame),
+    defaultUseCreateGame,
+    mockNavigate: vi.fn(),
+  };
+});
+
+vi.mock("@/hooks/useGame.ts", () => ({
+  useGame: mockUseGame,
+}));
+
+vi.mock("@/hooks/useAttempt.ts", () => ({
+  useAttempt: mockUseAttempt,
+}));
+
+vi.mock("@/hooks/usePlayer.ts", () => ({
+  usePlayer: mockUsePlayer,
+}));
+
+vi.mock("@/hooks/useCreateGame.ts", () => ({
+  useCreateGame: mockUseCreateGame,
+}));
+
+vi.mock("react-router", async () => {
+  const actual = await vi.importActual("react-router");
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
+
+const renderGamePage = () => {
+  render(
+    <MemoryRouter>
+      <GamePage />
+    </MemoryRouter>,
+  );
+};
+
+describe("game page", () => {
+  beforeEach(() => {
+    HTMLDialogElement.prototype.showModal = vi.fn(function (
+      this: HTMLDialogElement,
+    ) {
+      this.open = true;
+    });
+
+    HTMLDialogElement.prototype.close = vi.fn(function (
+      this: HTMLDialogElement,
+    ) {
+      this.open = false;
+    });
+  });
+
+  it("click picture shows targets", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter>
+        <GamePage />,
+      </MemoryRouter>,
+    );
+
+    const puzzleImage = screen.getByRole("img", { name: /puzzle/i });
+    await user.click(puzzleImage);
+    expect(screen.getByText("target-1")).toBeInTheDocument();
+  });
+
+  it("show game loading while fetching game", () => {
+    mockUseGame.mockReturnValue({
+      ...defaultUseGame,
+      game: null!,
+      gameLoading: true,
+    });
+    renderGamePage();
+    expect(screen.getByText(/loading/i)).toBeInTheDocument();
+  });
+
+  it("show game error message when exists", () => {
+    mockUseGame.mockReturnValue({
+      ...defaultUseGame,
+      gameError: new Error("fetch game failed"),
+    });
+    renderGamePage();
+    expect(screen.getByText(/failed/i)).toBeInTheDocument();
+  });
+
+  it("refetch game when hits", async () => {
+    const user = userEvent.setup();
+    const mockRefetchGame = vi.fn();
+    mockUseGame.mockReturnValue({
+      ...defaultUseGame,
+      refetchGame: mockRefetchGame,
+    });
+    const mockCreateAttempt = vi.fn().mockResolvedValue({
+      isAttemptValid: true,
+    });
+    mockUseAttempt.mockReturnValue({
+      ...defaultUseAttempt,
+      createAttempt: mockCreateAttempt,
+    });
+    renderGamePage();
+
+    await user.click(screen.getByRole("img", { name: /puzzle/i }));
+    await user.click(screen.getByRole("button", { name: /target-1/i }));
+    expect(mockCreateAttempt).toHaveBeenCalled();
+    expect(mockRefetchGame).toHaveBeenCalled();
+  });
+
+  it("disable targets when attempt loading", async () => {
+    const user = userEvent.setup();
+    mockUseAttempt.mockReturnValue({
+      ...defaultUseAttempt,
+      attemptLoading: true,
+    });
+    renderGamePage();
+
+    await user.click(screen.getByRole("img", { name: /puzzle/i }));
+    const targetButton = screen.getByRole("button", {
+      name: /target/i,
+    });
+    expect(targetButton).toBeDisabled();
+  });
+
+  it("show attempt error when exists", () => {
+    mockUseAttempt.mockReturnValue({
+      ...defaultUseAttempt,
+      attemptError: new Error("attempt error"),
+    });
+    renderGamePage();
+
+    expect(screen.getByText(/attempt error/i)).toBeInTheDocument();
+  });
+
+  it("render marks when targets found", () => {
+    mockUseGame.mockReturnValue({
+      ...defaultUseGame,
+      game: {
+        id: "gameId",
+        targets: [{ id: 1, name: "target-1", isFound: true }],
+        record: null,
+      },
+    });
+    renderGamePage();
+    expect(screen.getByTestId("target-marker-1")).toBeInTheDocument();
+  });
+
+  it("show result dialog when game ends", () => {
+    mockUseGame.mockReturnValue({
+      ...defaultUseGame,
+      game: {
+        id: "gameId",
+        targets: [{ id: 1, name: "target-1", isFound: true }],
+        record: 13_358_792,
+      },
+    });
+    renderGamePage();
+
+    expect(
+      screen.getByRole("dialog", { name: /game result/i }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/3:42:38.792/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("textbox", { name: /player/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /submit/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", {
+        name: /new game/i,
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /see leaderboard/i }),
+    ).toHaveAttribute("href", "/leaderboard");
+  });
+
+  it("hide player and submit button when setPlayer succeeds", async () => {
+    const user = userEvent.setup();
+    mockUseGame.mockReturnValue({
+      ...defaultUseGame,
+      game: {
+        id: "gameId",
+        targets: [{ id: 1, name: "target-1", isFound: true }],
+        record: 123,
+      },
+    });
+    const mockSetPlayer = vi.fn().mockResolvedValue(true);
+    mockUsePlayer.mockReturnValue({
+      ...defaultUsePlayer,
+      setPlayer: mockSetPlayer,
+    });
+    renderGamePage();
+
+    const playerInput = screen.getByRole("textbox", { name: /player/i });
+    const submitButton = screen.getByRole("button", { name: /submit/i });
+    await user.type(playerInput, "testPlayer");
+    await user.click(submitButton);
+    await waitFor(() => {
+      expect(playerInput).not.toBeInTheDocument();
+      expect(submitButton).not.toBeInTheDocument();
+    });
+    expect(mockSetPlayer).toHaveBeenCalledOnce();
+  });
+
+  it("disable player submit button while loading", async () => {
+    mockUseGame.mockReturnValue({
+      ...defaultUseGame,
+      game: {
+        id: "gameId",
+        targets: [{ id: 1, name: "target-1", isFound: true }],
+        record: 123,
+      },
+    });
+    mockUsePlayer.mockReturnValue({
+      ...defaultUsePlayer,
+      playerLoading: true,
+    });
+    renderGamePage();
+
+    expect(
+      screen.getByRole("button", { name: /submit/i }),
+    ).toBeDisabled();
+  });
+
+  it("show player error message when exists", async () => {
+    mockUseGame.mockReturnValue({
+      ...defaultUseGame,
+      game: {
+        id: "gameId",
+        targets: [{ id: 1, name: "target-1", isFound: true }],
+        record: 123,
+      },
+    });
+    mockUsePlayer.mockReturnValue({
+      ...defaultUsePlayer,
+      playerError: new Error("Player Error"),
+    });
+    renderGamePage();
+
+    expect(screen.getByText(/player error/i)).toBeInTheDocument();
+  });
+
+  it("create new game when new game button clicked", async () => {
+    const user = userEvent.setup();
+    mockUseGame.mockReturnValue({
+      ...defaultUseGame,
+      game: {
+        id: "gameId",
+        targets: [{ id: 1, name: "target-1", isFound: true }],
+        record: 123,
+      },
+    });
+    const mockCreateGame = vi.fn().mockResolvedValue("newGameId");
+    mockUseCreateGame.mockReturnValue({
+      ...defaultUseCreateGame,
+      createGame: mockCreateGame,
+    });
+    renderGamePage();
+    await user.click(screen.getByRole("button", { name: /new game/i }));
+    expect(mockCreateGame).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith("/games/newGameId");
+    });
+  });
+
+  it("disable new game button when loading", async () => {
+    mockUseGame.mockReturnValue({
+      ...defaultUseGame,
+      game: {
+        id: "gameId",
+        targets: [{ id: 1, name: "target-1", isFound: true }],
+        record: 123,
+      },
+    });
+    mockUseCreateGame.mockReturnValue({
+      ...defaultUseCreateGame,
+      createGameLoading: true,
+    });
+    renderGamePage();
+    expect(
+      screen.getByRole("button", { name: /new game/i }),
+    ).toBeDisabled();
+  });
+
+  it("show create game error if exists", async () => {
+    mockUseGame.mockReturnValue({
+      ...defaultUseGame,
+      game: {
+        id: "gameId",
+        targets: [{ id: 1, name: "target-1", isFound: true }],
+        record: 123,
+      },
+    });
+    mockUseCreateGame.mockReturnValue({
+      ...defaultUseCreateGame,
+      createGameError: new Error("create game error"),
+    });
+    renderGamePage();
+    expect(screen.getByText(/create game error/i)).toBeInTheDocument();
+  });
+});

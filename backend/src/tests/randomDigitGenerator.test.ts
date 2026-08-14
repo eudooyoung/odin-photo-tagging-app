@@ -1,4 +1,4 @@
-import { randomDigitsGenerator } from "@/lib/randomDigitGenerater.js";
+import { randomDigitsGenerator } from "@/lib/randomDigitGenerator.js";
 import { describe, expect, it } from "vitest";
 
 describe("random digit generator", () => {
@@ -7,8 +7,10 @@ describe("random digit generator", () => {
     expect(result.length).toBe(5);
   });
 
-  it("generate randin digits without duplicate", () => {
+  it("generate random digits without duplicate", () => {
     const result = randomDigitsGenerator();
-    expect(result.filter((digit) => digit === result.at(0))).toHaveLength(1);
+    expect(
+      result.filter((digit) => digit === result.at(0)),
+    ).toHaveLength(1);
   });
 });

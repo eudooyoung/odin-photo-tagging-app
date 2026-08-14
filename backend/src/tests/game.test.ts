@@ -1,4 +1,6 @@
 import { app } from "@/app.js";
+import { prisma } from "@/lib/prisma.js";
+import { findGameById } from "@/repositories/game.repository.js";
 import {
   type CreateGameResponse,
   type AttemptResponse,
@@ -10,14 +12,14 @@ import { describe, expect, it } from "vitest";
 
 const getBody = <T>(res: Response) => res.body as T;
 
-const createGame = async (): Promise<number> => {
+const createGame = async () => {
   const res = await request(app).post("/games");
   const { gameId } = getBody<CreateGameResponse>(res);
   return gameId;
 };
 
 const getGameResponseBody = async (
-  gameId: number,
+  gameId: string,
 ): Promise<GetGameResponse> => {
   const res = await request(app).get(`/games/${gameId}`);
   return getBody<GetGameResponse>(res);
@@ -30,24 +32,22 @@ describe("game api", () => {
 
     expect(res.status).toBe(201);
     expect(res.headers["content-type"]).toMatch(/json/);
-    expect(body.gameId).toBeTypeOf("number");
+    expect(body.gameId).toBeTypeOf("string");
   });
 
   it("get game", async () => {
     const gameId = await createGame();
     const res = await request(app).get(`/games/${gameId}`);
-    const { game, isGameEnded } = getBody<GetGameResponse>(res);
+    const { game } = getBody<GetGameResponse>(res);
 
     expect(res.status).toBe(200);
-    expect(game).toEqual(expect.objectContaining({ id: gameId }));
+    expect(game).toEqual(expect.objectContaining({ publicId: gameId }));
     expect(game.targets).toHaveLength(5);
-    expect(isGameEnded).toBe(false);
   });
 
   it("target attempt successful", async () => {
     const gameId = await createGame();
-    const { game } = await getGameResponseBody(gameId);
-    const { targets } = game;
+    const { targets } = await findGameById(gameId);
     const res = await request(app)
       .post(`/games/${gameId}/attempts`)
       .send({
@@ -55,18 +55,15 @@ describe("game api", () => {
         x: targets[0]!.x,
         y: targets[0]!.y,
       });
-    const { isAttemptValid, targetId } =
-      getBody<AttemptResponse>(res);
+    const { isAttemptValid } = getBody<AttemptResponse>(res);
 
     expect(res.status).toBe(200);
     expect(isAttemptValid).toBe(true);
-    expect(targetId).toBe(targets[0]!.id);
   });
 
   it("target attempt fails", async () => {
     const gameId = await createGame();
-    const { game } = await getGameResponseBody(gameId);
-    const { targets } = game;
+    const { targets } = await findGameById(gameId);
     const res = await request(app)
       .post(`/games/${gameId}/attempts`)
       .send({
@@ -82,8 +79,8 @@ describe("game api", () => {
 
   it("target attempt successful with game ends", async () => {
     const gameId = await createGame();
-    let gameResponse = await getGameResponseBody(gameId);
-    const { targets } = gameResponse.game;
+    const { targets } = await findGameById(gameId);
+
     for (let i = 0; i < 5; i++) {
       await request(app).post(`/games/${gameId}/attempts`).send({
         targetId: targets[i]!.id,
@@ -91,18 +88,15 @@ describe("game api", () => {
         y: targets[i]!.y,
       });
     }
+    const res = await getGameResponseBody(gameId);
 
-    gameResponse = await getGameResponseBody(gameId);
-
-    const res = gameResponse;
-    expect(res.isGameEnded).toBe(true);
-    expect(res.game.record).not.toBe(null);
+    expect(res.game.finishedAt).toBeTruthy();
+    expect(res.game.record).toBeTruthy();
   });
 
-  it("create score", async () => {
+  it("set player", async () => {
     const gameId = await createGame();
-    const { game } = await getGameResponseBody(gameId);
-    const { targets } = game;
+    const { targets } = await findGameById(gameId);
     for (let i = 0; i < 5; i++) {
       await request(app).post(`/games/${gameId}/attempts`).send({
         targetId: targets[i]!.id,
@@ -110,19 +104,36 @@ describe("game api", () => {
         y: targets[i]!.y,
       });
     }
-    const res = await request(app)
-      .patch(`/games/${gameId}/player`)
-      .send({
-        player: "Test Player",
-      });
+    const res = await request(app).patch(`/games/${gameId}/player`).send({
+      player: "Test Player",
+    });
 
     expect(res.status).toBe(201);
   });
 
   it("get leaderboard", async () => {
+    await prisma.game.createMany({
+      data: [
+        {
+          publicId: "game-1",
+          player: "player-1",
+          finishedAt: new Date(),
+          record: 1000,
+        },
+        {
+          publicId: "game-2",
+          player: "player-2",
+          finishedAt: new Date(),
+          record: 500,
+        },
+      ],
+    });
     const res = await request(app).get("/games/leaderboard");
     const { leaderboard } = getBody<GetLeaderboardResponse>(res);
 
-    expect(Array.isArray(leaderboard)).toBe(true);
+    expect(leaderboard).toEqual([
+      { rank: 1, player: "player-2", record: 500 },
+      { rank: 2, player: "player-1", record: 1000 },
+    ]);
   });
 });

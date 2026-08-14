@@ -1,5 +1,5 @@
 import { attemptValidator } from "@/lib/attemptValidator.js";
-import { randomDigitsGenerator } from "@/lib/randomDigitGenerater.js";
+import { randomDigitsGenerator } from "@/lib/randomDigitGenerator.js";
 import {
   createGameWithGeeks,
   findLeaderboard,
@@ -28,8 +28,16 @@ export const createGame: RequestHandler = async (req, res) => {
 
 export const getGame: RequestHandler = (req, res) => {
   const game = req.game;
-  const isGameEnded = game.finishedAt !== null;
-  return res.json({ game, isGameEnded });
+  const publicTargets = game.targets.map((target) =>
+    target.isFound
+      ? target
+      : {
+          id: target.id,
+          name: target.name,
+        },
+  );
+  const publicGame = { ...game, targets: publicTargets };
+  return res.json({ game: publicGame });
 };
 
 export const createAttempt: RequestHandler = async (req, res) => {
@@ -38,19 +46,14 @@ export const createAttempt: RequestHandler = async (req, res) => {
   const isAttemptValid = attemptValidator(attempt, game.targets);
   if (isAttemptValid) {
     // hit
-    const targetId = await markTargetAsFound(
-      game.id,
-      attempt.targetId,
-    );
+    await markTargetAsFound(game.id, attempt.targetId);
     const isGameEnded = await hasGameEnded(game.id);
     if (isGameEnded) {
       // found all
       const finishedAt = new Date();
       const record = finishedAt.getTime() - game.createdAt.getTime();
       await finishGameWithRecord(game.id, finishedAt, record);
-      return res.json({ isAttemptValid, targetId });
     }
-    return res.json({ isAttemptValid, targetId });
   }
   // miss
   return res.json({ isAttemptValid });
@@ -68,5 +71,9 @@ export const setPlayer = [...validatePlayer, setPlayerHandler];
 
 export const getLeaderboard: RequestHandler = async (req, res) => {
   const leaderboard = await findLeaderboard();
-  res.json({ leaderboard });
+  const leaderBoardWithRanks = leaderboard.map((entry, i) => ({
+    rank: i + 1,
+    ...entry,
+  }));
+  res.json({ leaderboard: leaderBoardWithRanks });
 };
