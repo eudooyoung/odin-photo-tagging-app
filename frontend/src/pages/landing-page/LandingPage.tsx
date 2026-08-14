@@ -18,14 +18,19 @@ export const LandingPage = () => {
     <section className={styles.hero}>
       <div className={styles.content}>
         <div className={styles.heroContent}>
-          <h1 className={styles.title}>Find Geeks</h1>
+          <h1 className={styles.heroTitle}>Find Geeks</h1>
           <button
+            className={styles.heroButton}
             onClick={startButtonHandler}
             disabled={createGameLoading}>
             Start
           </button>
-          <Link to={"/leaderboard"}>See Leaderboard</Link>
-          {createGameError && createGameError.message}
+          <p className={styles.heroError}>
+            {createGameError && createGameError.message}
+          </p>
+          <Link className={styles.heroLink} to={"/leaderboard"}>
+            See Leaderboard
+          </Link>
         </div>
       </div>
     </section>
