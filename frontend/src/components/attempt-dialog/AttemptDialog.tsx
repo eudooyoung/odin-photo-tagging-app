@@ -34,17 +34,19 @@ export const AttemptDialog = ({
       closedby="any"
       className={styles.attemptDialog}>
       <ul className={styles.targetList}>
-        {game.targets.map((target) => (
-          <li className={styles.targetListItem} key={target.id}>
-            <button
-              onClick={createAttemptHandler(target.id)}
-              disabled={attemptLoading || target.isFound}
-              className={`${styles.targetAttemptButton} ${target.isFound ? styles.found : ""}`}>
-              {target.name}
-            </button>
-            {attemptError && <>{attemptError.message}</>}
-          </li>
-        ))}
+        {game.targets
+          .filter((target) => !target.isFound)
+          .map((target) => (
+            <li className={styles.targetListItem} key={target.id}>
+              <button
+                onClick={createAttemptHandler(target.id)}
+                disabled={attemptLoading || target.isFound}
+                className={styles.targetAttemptButton}>
+                {target.name}
+              </button>
+              {attemptError && <>{attemptError.message}</>}
+            </li>
+          ))}
       </ul>
     </dialog>
   );

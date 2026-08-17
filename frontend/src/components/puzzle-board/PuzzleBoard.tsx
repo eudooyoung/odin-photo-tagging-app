@@ -196,17 +196,23 @@ export const PuzzleBoard = ({
       <div className={styles.rightPanel}>
         <ul className={styles.targetList}>
           {game.targets.map((target) => (
-            <li className={styles.targetListItem} key={target.id}>
+            <li
+              className={`${styles.targetListItem}  ${target.isFound ? styles.found : ""}`}
+              key={target.id}>
               {target.name}
             </li>
           ))}
         </ul>
-        <button onClick={zoomInHandler} className={styles.zoomInButton}>
-          Zoom in
-        </button>
-        <button onClick={zoomOutHandler} className={styles.zoomOutButton}>
-          Zoom out
-        </button>
+        <div className={styles.rightPanelButtons}>
+          <button onClick={zoomInHandler} className={styles.zoomInButton}>
+            Zoom in
+          </button>
+          <button
+            onClick={zoomOutHandler}
+            className={styles.zoomOutButton}>
+            Zoom out
+          </button>
+        </div>
       </div>
     </div>
   );
