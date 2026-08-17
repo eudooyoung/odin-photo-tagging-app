@@ -12,7 +12,6 @@ export const LeaderboardPage = () => {
 
   return (
     <main className={styles.main}>
-      {leaderboardError && <p>{leaderboardError.message}</p>}
       <table className={styles.leaderboard}>
         <caption className={styles.caption}>Leaderboard</caption>
         <colgroup>
@@ -50,6 +49,16 @@ export const LeaderboardPage = () => {
                 </tr>
               );
             })}
+          {leaderboardError && (
+            <tr>
+              <td
+                className="error"
+                colSpan={3}
+                style={{ textAlign: "center" }}>
+                {leaderboardError.message}
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </main>

@@ -1,0 +1,4 @@
+.marker {
+  position: absolute;
+  fill: var(--gray-900);
+}

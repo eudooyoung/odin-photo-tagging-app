@@ -1,4 +1,4 @@
-import type { Game } from "./game.types.ts";
+import type { Game, Target } from "./game.types.ts";
 
 export type PuzzleBoardProps = {
   game: Game;
@@ -23,4 +23,12 @@ export type AttemptDialogProps = {
 export type ResultDialogProps = {
   game: Game;
   resultDialogRef: React.RefObject<HTMLDialogElement | null>;
+};
+
+export type TargetMarkerProps = {
+  target: Target;
+  imageSize: {
+    width: number;
+    height: number;
+  } | null;
 };

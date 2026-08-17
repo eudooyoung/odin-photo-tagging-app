@@ -55,7 +55,7 @@ dialog::backdrop {
 }
 
 .error {
-  color: var(--red-500);
+  color: var(--red-700);
 }
 
 .visuallyHidden {
