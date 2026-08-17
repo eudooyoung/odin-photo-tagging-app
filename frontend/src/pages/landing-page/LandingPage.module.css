@@ -12,6 +12,7 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  box-shadow: 0 var(--size-1) var(--size-1) var(--gray-500);
 
   display: grid;
   place-content: center;
@@ -50,7 +51,7 @@
 
 .heroButton:hover {
   background-color: var(--gray-800);
-  transition: background-color 120ms ease-in-out;
+  transition: background-color 140ms ease-in-out;
 }
 
 .heroButton:active {
@@ -61,6 +62,14 @@
 .heroLink {
   color: var(--gray-700);
   font-weight: var(--weight-normal);
+}
+
+.heroLink:hover {
+  color: var(--gray-800);
+  font-weight: var(--weight-semibold);
+  transition: color, font-weight;
+  transition-duration: 140ms;
+  transition-timing-function: ease-in-out;
 }
 
 .heroError {

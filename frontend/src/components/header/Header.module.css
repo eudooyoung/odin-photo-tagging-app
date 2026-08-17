@@ -1,5 +1,8 @@
 .header {
-  background-color: var(--gray-700);
+  background-color: var(--gray-200);
+  box-shadow: 0 var(--size-1) var(--size-1) var(--gray-300);
+  position: relative;
+  z-index: 1;
   display: flex;
 }
 
@@ -8,6 +11,6 @@
 }
 
 .banner {
-  padding: var(--size-2);
-  color: var(--green-200);
+  padding: var(--size-3);
+  color: var(--green-900);
 }
