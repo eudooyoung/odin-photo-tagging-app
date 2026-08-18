@@ -32,3 +32,9 @@ export type TargetMarkerProps = {
     height: number;
   } | null;
 };
+
+export type RightPanelProps = {
+  game: Game;
+  onClickZoomIn: () => void;
+  onClickZoomOut: () => void;
+};

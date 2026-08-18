@@ -11,6 +11,8 @@ import {
 import { screenToImageCoords } from "@/lib/coordConverters.ts";
 import type { PuzzleBoardProps } from "@/types/props.types.ts";
 import { TargetMarker } from "../target-marker/TargetMarker.tsx";
+import { LeftPanel } from "../left-panel/LeftPanel.tsx";
+import { RightPanel } from "../right-panel/RightPanel.tsx";
 
 export const PuzzleBoard = ({
   game,
@@ -146,23 +148,7 @@ export const PuzzleBoard = ({
 
   return (
     <div className={styles.board}>
-      <div className={styles.leftPanel}>
-        <div className={styles.manual}>
-          <p className={styles.manualItem}>
-            Click the image and choose the target you found
-          </p>
-          <p className={styles.manualItem}>
-            Press Space key to drag the image
-          </p>
-          <p className={styles.manualItem}>
-            Press + or - to Zoom in or out
-          </p>
-        </div>
-        <div className={styles.leftPanelButtons}>
-          <button className={styles.newGameButton}>New Game</button>
-          <button className={styles.quitGameButton}>Quit Game</button>
-        </div>
-      </div>
+      <LeftPanel />
       <div
         className={styles.viewPort}
         ref={viewPortRef}
@@ -193,27 +179,11 @@ export const PuzzleBoard = ({
             ))}
         </div>
       </div>
-      <div className={styles.rightPanel}>
-        <ul className={styles.targetList}>
-          {game.targets.map((target) => (
-            <li
-              className={`${styles.targetListItem}  ${target.isFound ? styles.found : ""}`}
-              key={target.id}>
-              {target.name}
-            </li>
-          ))}
-        </ul>
-        <div className={styles.rightPanelButtons}>
-          <button onClick={zoomInHandler} className={styles.zoomInButton}>
-            Zoom in
-          </button>
-          <button
-            onClick={zoomOutHandler}
-            className={styles.zoomOutButton}>
-            Zoom out
-          </button>
-        </div>
-      </div>
+      <RightPanel
+        game={game}
+        onClickZoomIn={zoomInHandler}
+        onClickZoomOut={zoomOutHandler}
+      />
     </div>
   );
 };

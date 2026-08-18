@@ -40,7 +40,7 @@ export const AttemptDialog = ({
             <li className={styles.targetListItem} key={target.id}>
               <button
                 onClick={createAttemptHandler(target.id)}
-                disabled={attemptLoading || target.isFound}
+                disabled={attemptLoading}
                 className={styles.targetAttemptButton}>
                 {target.name}
               </button>

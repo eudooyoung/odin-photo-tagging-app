@@ -1,0 +1,151 @@
+.leftPanel {
+  padding: var(--size-8);
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-400) transparent;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--size-12);
+}
+
+.manual {
+  padding: var(--size-4) 0 var(--size-4) 0;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--yellow-300) transparent;
+
+  flex: 2;
+  background-color: var(--yellow-100);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 0 var(--size-1) var(--gray-300);
+
+  color: var(--yellow-500);
+  font-weight: var(--weight-medium);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  row-gap: var(--size-6);
+
+  transition-property: transform, color, font-weight, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
+}
+
+.manual:hover {
+  transform: translateY(calc(-1 * var(--size-1)));
+  color: var(--yellow-700);
+  font-weight: var(--weight-semibold);
+  box-shadow: 0 var(--size-1) var(--size-1) var(--gray-400);
+}
+
+.manualItem {
+  padding: 0 var(--size-6);
+}
+
+.leftPanelButtons {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: var(--size-6);
+}
+
+.leftPanelButtons > button {
+  border-radius: var(--radius-lg);
+  padding: var(--size-2);
+}
+
+.leftPanelButtons > button:hover {
+  transition-property: background-color color font-weight;
+  transition-duration: 120ms;
+  transition-timing-function: ease-in-out;
+}
+
+.newGameButton {
+  background-color: var(--green-200);
+  box-shadow: 0 0 var(--size-1) var(--gray-300);
+  color: var(--green-800);
+}
+
+.newGameButton:hover {
+  background-color: var(--green-300);
+  color: var(--green-900);
+  font-weight: var(--weight-bold);
+}
+
+.quitGameButton {
+  align-self: center;
+  background-color: inherit;
+  color: var(--gray-700);
+}
+
+.quitGameButton:hover {
+  color: var(--red-500);
+  font-weight: var(--weight-bold);
+  text-decoration: underline;
+}
+
+@media (max-height: 800px) {
+  .leftPanel {
+    padding-block: var(--size-8);
+    row-gap: var(--size-6);
+  }
+}
+
+@media (max-width: 1200px) {
+  .leftPanel {
+    padding: var(--size-2) var(--size-6);
+    width: 100%;
+    flex-direction: row;
+    column-gap: var(--size-24);
+  }
+
+  .manual {
+    flex: 1;
+    row-gap: var(--size-3);
+  }
+
+  .leftPanelButtons {
+    flex-direction: row-reverse;
+    align-items: center;
+    column-gap: var(--size-6);
+  }
+
+  .newGameButton,
+  .quitGameButton {
+    flex: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .leftPanel {
+    column-gap: var(--size-12);
+  }
+}
+
+@media (max-width: 600px) {
+  .leftPanel {
+    padding: var(--size-2) var(--size-4);
+    column-gap: var(--size-6);
+  }
+
+  .manual {
+    box-shadow: 0 0 var(--size-1) var(--gray-200);
+  }
+
+  .leftPanelButtons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .newGameButton,
+  .quitGameButton {
+    flex: initial;
+  }
+}

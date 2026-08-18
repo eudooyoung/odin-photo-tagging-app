@@ -1,6 +1,6 @@
 .header {
-  background-color: var(--gray-300);
-  box-shadow: 0 var(--size-1) var(--size-1) var(--gray-400);
+  background-color: var(--green-50);
+  box-shadow: 0 0 var(--size-1) var(--gray-200);
   position: relative;
   z-index: 1;
   display: flex;
@@ -12,5 +12,11 @@
 
 .banner {
   padding: var(--size-3);
-  color: var(--green-900);
+  color: var(--green-800);
+}
+
+@media (max-width: 600px) {
+  .header {
+    box-shadow: 0 var(--size-1) var(--size-1) var(--gray-200);
+  }
 }

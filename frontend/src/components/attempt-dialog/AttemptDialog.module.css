@@ -18,7 +18,7 @@
 
 .targetAttemptButton {
   background-color: inherit;
-  height: var(--size-12);
+  min-height: var(--size-12);
   padding: 0 var(--size-6);
   width: 100%;
 

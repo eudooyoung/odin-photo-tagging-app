@@ -1,6 +1,6 @@
 import { GamePage } from "@/pages/game-page/GamePage.tsx";
 import { GameRouter } from "@/routes/GameRouter.tsx";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -108,6 +108,9 @@ describe("game page", () => {
     ) {
       this.open = false;
     });
+
+    HTMLElement.prototype.setPointerCapture = vi.fn();
+    HTMLElement.prototype.releasePointerCapture = vi.fn();
   });
 
   it("click picture shows targets", async () => {
@@ -116,7 +119,9 @@ describe("game page", () => {
 
     const puzzleImage = screen.getByRole("img", { name: /puzzle/i });
     await user.click(puzzleImage);
-    expect(screen.getByText("target-1")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /target-1/i }),
+    ).toBeInTheDocument();
   });
 
   it("show game loading while fetching game", () => {
@@ -211,23 +216,25 @@ describe("game page", () => {
     });
     renderGamePage();
 
+    const resultDialog = screen.getByRole("dialog", {
+      name: /game result/i,
+    });
+    const inResultDialog = within(resultDialog);
+    expect(resultDialog).toBeInTheDocument();
+    expect(inResultDialog.getByText(/03:42:38.792/i)).toBeInTheDocument();
     expect(
-      screen.getByRole("dialog", { name: /game result/i }),
+      inResultDialog.getByRole("textbox", { name: /player/i }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/03:42:38.792/i)).toBeInTheDocument();
     expect(
-      screen.getByRole("textbox", { name: /player/i }),
+      inResultDialog.getByRole("button", { name: /submit/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /submit/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", {
+      inResultDialog.getByRole("button", {
         name: /new game/i,
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /see leaderboard/i }),
+      inResultDialog.getByRole("link", { name: /see leaderboard/i }),
     ).toHaveAttribute("href", "/leaderboard");
   });
 
@@ -317,7 +324,11 @@ describe("game page", () => {
       createGame: mockCreateGame,
     });
     renderGamePage();
-    await user.click(screen.getByRole("button", { name: /new game/i }));
+    await user.click(
+      within(
+        screen.getByRole("dialog", { name: /game result/i }),
+      ).getByRole("button", { name: /new game/i }),
+    );
     expect(mockCreateGame).toHaveBeenCalled();
     await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith("/games/newGameId");
@@ -340,7 +351,9 @@ describe("game page", () => {
     });
     renderGamePage();
     expect(
-      screen.getByRole("button", { name: /new game/i }),
+      within(
+        screen.getByRole("dialog", { name: /game result/i }),
+      ).getByRole("button", { name: /new game/i }),
     ).toBeDisabled();
   });
 
