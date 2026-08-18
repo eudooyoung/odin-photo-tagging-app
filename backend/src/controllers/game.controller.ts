@@ -28,14 +28,16 @@ export const createGame: RequestHandler = async (req, res) => {
 
 export const getGame: RequestHandler = (req, res) => {
   const game = req.game;
-  const publicTargets = game.targets.map((target) =>
-    target.isFound
-      ? target
-      : {
-          id: target.id,
-          name: target.name,
-        },
-  );
+  const publicTargets = game.targets
+    .map((target) =>
+      target.isFound
+        ? target
+        : {
+            id: target.id,
+            name: target.name,
+          },
+    )
+    .sort((targetA, targetB) => targetA.id - targetB.id);
   const publicGame = { ...game, targets: publicTargets };
   return res.json({ game: publicGame });
 };
