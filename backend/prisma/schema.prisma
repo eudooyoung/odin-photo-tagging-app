@@ -37,7 +37,7 @@ model Game {
 model GeeksOnGames {
   geek    Geek    @relation(fields: [geekId], references: [id])
   geekId  Int
-  game    Game    @relation(fields: [gameId], references: [id])
+  game    Game    @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId  Int
   isFound Boolean @default(false)
 

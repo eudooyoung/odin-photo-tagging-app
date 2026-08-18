@@ -1,7 +1,7 @@
 import type { Game, Geek } from "@/generated/prisma/client.js";
 
 export type CreateGameResponse = {
-  gameId: string;
+  publicId: string;
 };
 
 export type Target = Geek & {
@@ -19,7 +19,7 @@ export type GameWithPublicTargets = Game & {
 };
 
 export type GetGameResponse = {
-  game: GameWithPublicTargets;
+  game: Omit<GameWithPublicTargets, "id">;
 };
 
 export type AttemptResponse = {

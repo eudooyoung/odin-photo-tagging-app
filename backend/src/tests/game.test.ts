@@ -1,6 +1,6 @@
 import { app } from "@/app.js";
 import { prisma } from "@/lib/prisma.js";
-import { findGameById } from "@/repositories/game.repository.js";
+import { findGameByPublicId } from "@/repositories/game.repository.js";
 import {
   type CreateGameResponse,
   type AttemptResponse,
@@ -14,8 +14,8 @@ const getBody = <T>(res: Response) => res.body as T;
 
 const createGame = async () => {
   const res = await request(app).post("/games");
-  const { gameId } = getBody<CreateGameResponse>(res);
-  return gameId;
+  const { publicId } = getBody<CreateGameResponse>(res);
+  return publicId;
 };
 
 const getGameResponseBody = async (
@@ -32,24 +32,24 @@ describe("game api", () => {
 
     expect(res.status).toBe(201);
     expect(res.headers["content-type"]).toMatch(/json/);
-    expect(body.gameId).toBeTypeOf("string");
+    expect(body.publicId).toBeTypeOf("string");
   });
 
   it("get game", async () => {
-    const gameId = await createGame();
-    const res = await request(app).get(`/games/${gameId}`);
+    const publicId = await createGame();
+    const res = await request(app).get(`/games/${publicId}`);
     const { game } = getBody<GetGameResponse>(res);
 
     expect(res.status).toBe(200);
-    expect(game).toEqual(expect.objectContaining({ publicId: gameId }));
+    expect(game).toEqual(expect.objectContaining({ publicId }));
     expect(game.targets).toHaveLength(5);
   });
 
   it("target attempt successful", async () => {
-    const gameId = await createGame();
-    const { targets } = await findGameById(gameId);
+    const publicId = await createGame();
+    const { targets } = await findGameByPublicId(publicId);
     const res = await request(app)
-      .post(`/games/${gameId}/attempts`)
+      .post(`/games/${publicId}/attempts`)
       .send({
         targetId: targets[0]!.id,
         x: targets[0]!.x,
@@ -62,10 +62,10 @@ describe("game api", () => {
   });
 
   it("target attempt fails", async () => {
-    const gameId = await createGame();
-    const { targets } = await findGameById(gameId);
+    const publicId = await createGame();
+    const { targets } = await findGameByPublicId(publicId);
     const res = await request(app)
-      .post(`/games/${gameId}/attempts`)
+      .post(`/games/${publicId}/attempts`)
       .send({
         targetId: targets[0]!.id,
         x: targets[0]!.x + targets[0]!.width + 1,
@@ -78,35 +78,37 @@ describe("game api", () => {
   });
 
   it("target attempt successful with game ends", async () => {
-    const gameId = await createGame();
-    const { targets } = await findGameById(gameId);
+    const publicId = await createGame();
+    const { targets } = await findGameByPublicId(publicId);
 
     for (let i = 0; i < 5; i++) {
-      await request(app).post(`/games/${gameId}/attempts`).send({
+      await request(app).post(`/games/${publicId}/attempts`).send({
         targetId: targets[i]!.id,
         x: targets[i]!.x,
         y: targets[i]!.y,
       });
     }
-    const res = await getGameResponseBody(gameId);
+    const res = await getGameResponseBody(publicId);
 
     expect(res.game.finishedAt).toBeTruthy();
     expect(res.game.record).toBeTruthy();
   });
 
   it("set player", async () => {
-    const gameId = await createGame();
-    const { targets } = await findGameById(gameId);
+    const publicId = await createGame();
+    const { targets } = await findGameByPublicId(publicId);
     for (let i = 0; i < 5; i++) {
-      await request(app).post(`/games/${gameId}/attempts`).send({
+      await request(app).post(`/games/${publicId}/attempts`).send({
         targetId: targets[i]!.id,
         x: targets[i]!.x,
         y: targets[i]!.y,
       });
     }
-    const res = await request(app).patch(`/games/${gameId}/player`).send({
-      player: "Test Player",
-    });
+    const res = await request(app)
+      .patch(`/games/${publicId}/player`)
+      .send({
+        player: "Test Player",
+      });
 
     expect(res.status).toBe(201);
   });
@@ -135,5 +137,23 @@ describe("game api", () => {
       { rank: 1, player: "player-2", record: 500 },
       { rank: 2, player: "player-1", record: 1000 },
     ]);
+  });
+
+  it("delete game", async () => {
+    const gameId = await createGame();
+    const res = await request(app).delete(`/games/${gameId}`);
+    expect(res.status).toBe(204);
+  });
+
+  it("delete unfinished games created more than a day ago when create a new game", async () => {
+    const { publicId: oldGameId } = await prisma.game.create({
+      data: { createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000) },
+    });
+    await createGame();
+    expect(
+      await prisma.game.findUnique({
+        where: { publicId: oldGameId },
+      }),
+    ).toBeNull();
   });
 });

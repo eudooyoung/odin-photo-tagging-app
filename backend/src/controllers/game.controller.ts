@@ -2,6 +2,8 @@ import { attemptValidator } from "@/lib/attemptValidator.js";
 import { randomDigitsGenerator } from "@/lib/randomDigitGenerator.js";
 import {
   createGameWithGeeks,
+  deleteGameById,
+  deleteOldUnfinishedGames,
   findLeaderboard,
   finishGameWithRecord,
   updateGameWithPlayer,
@@ -19,15 +21,30 @@ import { validatePlayer } from "@/validates/player.validate.js";
 import type { RequestHandler } from "express";
 import { matchedData } from "express-validator";
 
-export const createGame: RequestHandler = async (req, res) => {
-  const randomIds = randomDigitsGenerator();
-  const geeks = await findGeeksByRandomIds(randomIds);
-  const gameId = await createGameWithGeeks(geeks);
-  return res.status(201).json({ gameId });
+export const createGameHandler: RequestHandler = async (req, res) => {
+  const randomGeekIds = randomDigitsGenerator();
+  const geeks = await findGeeksByRandomIds(randomGeekIds);
+  const publicId = await createGameWithGeeks(geeks);
+  return res.status(201).json({ publicId });
 };
 
+const cleanUpOldGamesHandler: RequestHandler = async (
+  _req,
+  _res,
+  next,
+) => {
+  await deleteOldUnfinishedGames();
+  next();
+};
+
+export const createGameHandlers = [
+  cleanUpOldGamesHandler,
+  createGameHandler,
+];
+
 export const getGame: RequestHandler = (req, res) => {
-  const game = req.game;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { id: _id, ...game } = req.game;
   const publicTargets = game.targets
     .map((target) =>
       target.isFound
@@ -78,4 +95,10 @@ export const getLeaderboard: RequestHandler = async (req, res) => {
     ...entry,
   }));
   res.json({ leaderboard: leaderBoardWithRanks });
+};
+
+export const deleteGame: RequestHandler = async (req, res) => {
+  const { id } = req.game;
+  await deleteGameById(id);
+  res.status(204).end();
 };
