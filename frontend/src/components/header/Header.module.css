@@ -1,6 +1,6 @@
 .header {
-  background-color: var(--gray-200);
-  box-shadow: 0 var(--size-1) var(--size-1) var(--gray-300);
+  background-color: var(--gray-300);
+  box-shadow: 0 var(--size-1) var(--size-1) var(--gray-400);
   position: relative;
   z-index: 1;
   display: flex;
