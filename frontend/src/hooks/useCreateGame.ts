@@ -2,8 +2,9 @@ import { env } from "@/lib/env.ts";
 import { useState } from "react";
 
 export const useCreateGame = () => {
-  const [createGameError, setCreateGameError] =
-    useState<Error | null>(null);
+  const [createGameError, setCreateGameError] = useState<Error | null>(
+    null,
+  );
   const [createGameLoading, setCreateGameLoading] = useState(false);
 
   const createGame = async () => {
@@ -18,7 +19,7 @@ export const useCreateGame = () => {
         throw new Error(`Server error: ${response.status}`);
       }
 
-      const { gameId } = await response.json();
+      const { publicId: gameId } = await response.json();
       return gameId;
     } catch (error) {
       if (error instanceof Error) {
