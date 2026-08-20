@@ -36,7 +36,7 @@
   },
   "scripts": {
     "test": "vitest",
-    "build": "prisma generate && rm -rf dist/ && tsc && cp -r src/views dist/src/ && cp -r src/public dist/src/",
+    "build": "prisma generate && rm -rf dist/ && tsc",
     "start": "tsx dist/src/server.js",
     "dev": "tsx --watch src/server.ts"
   },
