@@ -8,7 +8,7 @@ describe("useCreateGame hook", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
       status: 201,
-      json: () => Promise.resolve({ gameId: "mock-gameId" }),
+      json: () => Promise.resolve({ publicId: "mock-gameId" }),
     } as Response);
     const { result } = renderHook(() => useCreateGame());
 

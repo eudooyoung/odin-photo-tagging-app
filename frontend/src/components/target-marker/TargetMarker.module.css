@@ -1,0 +1,4 @@
+.marker {
+  position: absolute;
+  fill: var(--blue-900);
+}

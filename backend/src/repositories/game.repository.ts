@@ -3,7 +3,7 @@ import type { Geek } from "@/generated/prisma/client.js";
 import { prisma } from "@/lib/prisma.js";
 
 export const createGameWithGeeks = async (geeks: Geek[]) => {
-  const { publicId: gameId } = await prisma.game.create({
+  const { publicId } = await prisma.game.create({
     data: {
       targets: {
         create: geeks.map((geek) => ({
@@ -16,7 +16,7 @@ export const createGameWithGeeks = async (geeks: Geek[]) => {
       },
     },
   });
-  return gameId;
+  return publicId;
 
   /*   return prisma.$transaction(async (tx) => {
     const { id } = await tx.game.create({ data: {} });
@@ -32,9 +32,9 @@ export const createGameWithGeeks = async (geeks: Geek[]) => {
   }); */
 };
 
-export const findGameById = async (id: string) => {
+export const findGameByPublicId = async (publicId: string) => {
   const game = await prisma.game.findUnique({
-    where: { publicId: id },
+    where: { publicId },
     include: {
       targets: {
         include: {
@@ -100,5 +100,19 @@ export const findLeaderboard = async () => {
       record: "asc",
     },
     take: 10,
+  });
+};
+
+export const deleteGameById = async (id: number) => {
+  await prisma.game.delete({ where: { id } });
+};
+
+export const deleteOldUnfinishedGames = async () => {
+  const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  await prisma.game.deleteMany({
+    where: {
+      finishedAt: null,
+      createdAt: { lt: oneDayAgo },
+    },
   });
 };

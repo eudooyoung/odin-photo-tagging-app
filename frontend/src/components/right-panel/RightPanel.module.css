@@ -1,0 +1,147 @@
+.rightPanel {
+  padding: var(--size-8);
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-400) transparent;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--size-12);
+}
+
+.targetList {
+  padding: var(--size-4) 0 var(--size-4) 0;
+  list-style: none;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--blue-300) transparent;
+
+  flex: 2;
+  background-color: var(--blue-100);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 0 var(--size-1) var(--gray-300);
+
+  color: var(--blue-300);
+  font-weight: var(--weight-medium);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  row-gap: var(--size-6);
+
+  transition-property: transform, font-weight, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
+}
+
+.targetList:hover {
+  transform: translateY(calc(-1 * var(--size-1)));
+  font-weight: var(--weight-semibold);
+  box-shadow: 0 var(--size-1) var(--size-1) var(--gray-400);
+}
+
+.targetListItem {
+  padding: 0 var(--size-6);
+}
+
+.targetListItem.found {
+  color: var(--blue-500);
+  font-weight: var(--weight-semibold);
+}
+
+.rightPanelButtons {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: var(--size-8);
+}
+
+.zoomInButton,
+.zoomOutButton {
+  padding: var(--size-2);
+  background-color: var(--gray-300);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 0 var(--size-1) var(--gray-300);
+  color: var(--gray-700);
+}
+
+.zoomInButton:hover,
+.zoomOutButton:hover {
+  background-color: var(--gray-400);
+  font-weight: var(--weight-semibold);
+
+  transition-property: background-color, font-weight;
+  transition-duration: 100ms;
+  transition-timing-function: ease-in-out;
+}
+
+@media (max-height: 800px) {
+  .rightPanel {
+    padding-block: var(--size-8);
+    row-gap: var(--size-6);
+  }
+}
+
+@media (max-width: 1500px) {
+  .rightPanel {
+    padding: var(--size-2) var(--size-6);
+    width: 100%;
+    flex-direction: row;
+    column-gap: var(--size-24);
+  }
+
+  .targetList {
+    flex: 1;
+    row-gap: var(--size-3);
+  }
+
+  .rightPanelButtons {
+    flex-direction: row;
+    align-items: center;
+    column-gap: var(--size-6);
+  }
+
+  .zoomInButton,
+  .zoomOutButton {
+    flex: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .rightPanel {
+    column-gap: var(--size-12);
+  }
+}
+
+@media (max-width: 600px) {
+  .rightPanel {
+    padding: var(--size-2) var(--size-4);
+    column-gap: var(--size-6);
+  }
+
+  .targetList {
+    padding: var(--size-2) 0 var(--size-2) 0;
+    box-shadow: 0 0 var(--size-1) var(--gray-200);
+    font-size: var(--text-xs);
+  }
+
+  .targetListItem {
+    padding: 0 var(--size-4);
+  }
+
+  .rightPanelButtons {
+    flex-direction: column;
+    align-items: stretch;
+    row-gap: var(--size-3);
+  }
+
+  .zoomInButton,
+  .zoomOutButton {
+    flex: initial;
+  }
+}

@@ -29,7 +29,6 @@ video,
 canvas,
 svg {
   display: block;
-  max-width: 100%;
 }
 
 input,
@@ -49,4 +48,24 @@ button:hover {
 
 a {
   color: inherit;
+}
+
+dialog::backdrop {
+  background-color: var(--dialog-backdrop-overlay);
+}
+
+.error {
+  color: var(--red-700);
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

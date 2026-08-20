@@ -1,0 +1,60 @@
+.attemptDialog {
+  padding: 0;
+  max-width: var(--size-192);
+  background-color: var(--blue-300);
+  border: none;
+  border-radius: 0 var(--radius-xl) var(--radius-xl) var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+}
+
+.targetList {
+  margin-bottom: var(--size-6);
+  width: 100%;
+  list-style: none;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--size-3);
+}
+
+.targetAttemptButton {
+  background-color: inherit;
+  padding: 0 var(--size-6);
+  width: 100%;
+
+  color: var(--blue-700);
+  font-weight: var(--weight-semibold);
+  text-align: left;
+}
+
+.targetAttemptButton:hover {
+  background-color: var(--blue-500);
+  color: var(--blue-100);
+  transition-property: background-color color;
+  transition-duration: 100ms;
+  transition-timing-function: ease-in-out;
+}
+
+.targetAttemptButton:focus {
+  outline: none;
+}
+
+.error {
+  min-height: var(--size-6);
+  padding: 0 var(--size-6);
+  color: var(--red-700);
+}
+
+@media (max-width: 600px) {
+  .targetAttemptButton {
+    min-height: var(--size-8);
+    font-size: var(--text-xs);
+  }
+
+  .error {
+    min-height: var(--size-6);
+    color: var(--red-700);
+    font-size: var(--text-xs);
+  }
+}

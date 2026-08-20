@@ -50,11 +50,11 @@ describe("Leaderboard Page", () => {
       </MemoryRouter>,
     );
     expect(
-      screen.getByRole("row", { name: "1 player-2 300" }),
+      screen.getByRole("row", { name: "1 player-2 00:00:00.300" }),
     ).toBeInTheDocument();
 
     expect(
-      screen.getByRole("row", { name: "2 player-1 500" }),
+      screen.getByRole("row", { name: "2 player-1 00:00:00.500" }),
     ).toBeInTheDocument();
   });
 

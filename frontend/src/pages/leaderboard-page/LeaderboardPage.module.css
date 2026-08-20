@@ -1,6 +1,6 @@
 .main {
   min-height: calc(100dvh - var(--size-16));
-  background-color: var(--gray-600);
+  background-color: var(--blue-50);
 
   display: flex;
   flex-direction: column;
@@ -8,49 +8,67 @@
   place-items: center;
 }
 
+.leaderboardWrapper {
+  box-shadow: var(--shadow-xl);
+  border-radius: var(--radius-lg);
+}
+
 .caption {
-  background-color: var(--gray-300);
+  background-color: var(--gray-200);
   padding: 0;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+
   min-height: var(--size-16);
   line-height: var(--size-16);
   text-align: center;
 
   font-family: var(--font-display);
-  font-size: var(--text-3xl);
+  font-size: var(--text-2xl);
   font-weight: var(--weight-semibold);
-  color: var(--gray-800);
+  color: var(--gray-700);
 }
 
 .leaderboard {
   table-layout: fixed;
-  background-color: var(--gray-300);
+  background-color: var(--gray-200);
 
-  min-height: var(--size-128);
-  min-width: var(--size-128);
+  height: clamp(var(--size-64), 80dvw, var(--size-96));
+  width: clamp(var(--size-64), 90dvw, var(--size-128));
   padding-inline: var(--size-4);
   padding-bottom: var(--size-4);
 
-  border-spacing: 0;
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  box-shadow: var(--shadow-xl);
+  border-collapse: collapse;
 
   color: var(--gray-700);
 }
 
-.colHeader {
-  background-color: var(--gray-500);
-  color: var(--gray-200);
+.colHeader,
+.rankCell,
+.playerCell,
+.recordCell {
+  font-size: clamp(var(--text-xs), 3dvw, var(--text-base));
 }
 
-.colHeader:first-child {
-  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+.colHeaderRow {
+  background-color: var(--gray-400);
 }
 
-.colHeader:last-child {
-  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+.entryRow:nth-child(1) {
+  background-color: var(--green-400);
+  color: var(--gray-50);
+  font-weight: var(--weight-bold);
 }
 
+.entryRow:nth-child(2) {
+  background-color: var(--green-300);
+  color: var(--gray-50);
+  font-weight: var(--weight-semibold);
+}
+
+.entryRow:nth-child(3) {
+  background-color: var(--green-200);
+}
 .rankCol {
   width: var(--size-24);
 }
