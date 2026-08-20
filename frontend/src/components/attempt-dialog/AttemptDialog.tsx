@@ -2,6 +2,7 @@ import { useParams } from "react-router";
 import styles from "./AttemptDialog.module.css";
 import type { AttemptDialogProps } from "@/types/props.types.ts";
 import { useAttempt } from "@/hooks/useAttempt.ts";
+import type { MouseEventHandler } from "react";
 
 export const AttemptDialog = ({
   game,
@@ -28,11 +29,20 @@ export const AttemptDialog = ({
     attemptDialogRef.current?.close();
   };
 
+  const closeDialogHandler: MouseEventHandler<HTMLDialogElement> = (
+    e,
+  ) => {
+    if (e.target === e.currentTarget) {
+      e.currentTarget.close();
+    }
+  };
+
   return (
     <dialog
       ref={attemptDialogRef}
       closedby="any"
-      className={styles.attemptDialog}>
+      className={styles.attemptDialog}
+      onClick={closeDialogHandler}>
       <p className={styles.error}>
         {attemptError && attemptError.message}
       </p>

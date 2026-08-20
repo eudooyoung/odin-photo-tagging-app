@@ -18,11 +18,15 @@ export const GamePage = () => {
   const resultDialogRef = useRef<HTMLDialogElement | null>(null);
 
   if (!game && gameLoading) {
-    return <>game loading...</>;
+    return <main className={styles.main}>game loading...</main>;
   }
 
   if (!game) {
-    return <>game not found</>;
+    return (
+      <main className={styles.main}>
+        <p className={styles.error}>game not found</p>
+      </main>
+    );
   }
 
   return (

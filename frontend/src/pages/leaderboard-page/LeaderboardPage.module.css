@@ -32,7 +32,7 @@
   table-layout: fixed;
   background-color: var(--gray-200);
 
-  height: clamp(var(--size-64), 80dvw, var(--size-96));
+  /* height: clamp(var(--size-64), 80dvw, var(--size-96)); */
   width: clamp(var(--size-64), 90dvw, var(--size-128));
   padding-inline: var(--size-4);
   padding-bottom: var(--size-4);
@@ -54,21 +54,22 @@
   background-color: var(--gray-400);
 }
 
-.entryRow:nth-child(1) {
+.firstRank {
   background-color: var(--green-400);
   color: var(--gray-50);
   font-weight: var(--weight-bold);
 }
 
-.entryRow:nth-child(2) {
+.secondRank {
   background-color: var(--green-300);
   color: var(--gray-50);
   font-weight: var(--weight-semibold);
 }
 
-.entryRow:nth-child(3) {
+.thirdRank {
   background-color: var(--green-200);
 }
+
 .rankCol {
   width: var(--size-24);
 }

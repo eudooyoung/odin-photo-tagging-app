@@ -1,5 +1,5 @@
 import { LeaderboardPage } from "@/pages/leaderboard-page/LeaderboardPage";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import { describe, expect, it, vi } from "vitest";
 
@@ -41,6 +41,21 @@ describe("Leaderboard Page", () => {
     expect(
       screen.getByRole("columnheader", { name: /record/i }),
     ).toBeInTheDocument();
+  });
+
+  it("display 10 ranking even when there is no data", () => {
+    mockUseLeaderboard.mockReturnValueOnce({
+      ...defaultUseLeaderboard,
+      leaderboard: [],
+    });
+    render(
+      <MemoryRouter>
+        <LeaderboardPage />
+      </MemoryRouter>,
+    );
+
+    const tbody = screen.getByTestId("leaderboard-body");
+    expect(within(tbody).getAllByRole("row")).toHaveLength(10);
   });
 
   it("displays player records", () => {

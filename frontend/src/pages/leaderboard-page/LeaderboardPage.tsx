@@ -6,12 +6,17 @@ export const LeaderboardPage = () => {
   const { leaderboard, leaderboardError, leaderboardLoading } =
     useLeaderboard();
 
-  if (leaderboardLoading) {
-    return;
-  }
+  const rankClass: Record<number, string> = {
+    1: styles.firstRank,
+    2: styles.secondRank,
+    3: styles.thirdRank,
+  };
+
+  const entries = Array.from({ length: 10 }, (_, i) => leaderboard?.[i]);
 
   return (
     <main className={styles.main}>
+      {leaderboardLoading && <>Loading...</>}
       <div className={styles.leaderboardWrapper}>
         <table className={styles.leaderboard}>
           <caption className={styles.caption}>Leaderboard</caption>
@@ -33,20 +38,20 @@ export const LeaderboardPage = () => {
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody data-testid="leaderboard-body">
             {leaderboard &&
-              leaderboard.map((entry) => {
-                const record = formatRecord(entry.record);
+              entries.map((entry, i) => {
+                const record = entry ? formatRecord(entry.record) : null;
                 return (
-                  <tr key={entry.rank} className={styles.entryRow}>
+                  <tr key={i} className={entry && rankClass[entry.rank]}>
                     <th className={styles.rankCell} scope="row">
-                      {entry.rank}
+                      {i + 1}
                     </th>
-                    <td className={styles.playerCell}>{entry.player}</td>
-                    <td
-                      className={
-                        styles.recordCell
-                      }>{`${record.hours}:${record.minutes}:${record.seconds}.${record.milliseconds}`}</td>
+                    <td className={styles.playerCell}>{entry?.player}</td>
+                    <td className={styles.recordCell}>
+                      {record &&
+                        `${record.hours}:${record.minutes}:${record.seconds}.${record.milliseconds}`}
+                    </td>
                   </tr>
                 );
               })}
