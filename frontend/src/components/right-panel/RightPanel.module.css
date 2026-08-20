@@ -125,7 +125,13 @@
   }
 
   .targetList {
+    padding: var(--size-2) 0 var(--size-2) 0;
     box-shadow: 0 0 var(--size-1) var(--gray-200);
+    font-size: var(--text-xs);
+  }
+
+  .targetListItem {
+    padding: 0 var(--size-4);
   }
 
   .rightPanelButtons {
