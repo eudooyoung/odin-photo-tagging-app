@@ -246,24 +246,18 @@ describe("game page", () => {
       ).toBeDisabled();
     });
 
-    it("show any error when occured during deleting game or creating game", () => {
+    it("show action error in game sidebar", () => {
       mockUseDeleteGame.mockReturnValue({
         ...defaultUseDeleteGame,
         deleteGameError: new Error("Delete Game fails"),
       });
-      mockUseCreateGame.mockReturnValue({
-        ...defaultUseCreateGame,
-        createGameError: new Error("Create Game fails"),
-      });
+
       renderGamePage();
       const leftPanel = screen.getByRole("complementary", {
         name: /game sidebar/i,
       });
       expect(
         within(leftPanel).getByText(/delete game fails/i),
-      ).toBeInTheDocument();
-      expect(
-        within(leftPanel).getByText(/create game fails/i),
       ).toBeInTheDocument();
     });
   });

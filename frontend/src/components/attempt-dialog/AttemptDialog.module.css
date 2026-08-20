@@ -8,6 +8,7 @@
 }
 
 .targetList {
+  margin-bottom: var(--size-6);
   width: 100%;
   list-style: none;
   padding: 0;
@@ -37,4 +38,10 @@
 
 .targetAttemptButton:focus {
   outline: none;
+}
+
+.error {
+  min-height: var(--size-6);
+  padding: 0 var(--size-6);
+  color: var(--red-700);
 }

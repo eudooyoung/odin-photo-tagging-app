@@ -10,6 +10,7 @@ export const LeftPanel = () => {
     useDeleteGame(gameId);
   const { createGame, createGameError, createGameLoading } =
     useCreateGame();
+  const actionError = deleteGameError ?? createGameError;
 
   const quitGameHandler = async () => {
     const success = await deleteGame();
@@ -43,21 +44,24 @@ export const LeftPanel = () => {
           Press + or - to Zoom in or out
         </p>
       </div>
-      <div className={styles.leftPanelButtons}>
-        <button
-          className={styles.newGameButton}
-          onClick={createGameHandler}
-          disabled={deleteGameLoading || createGameLoading}>
-          New Game
-        </button>
-        {createGameError && <p>{createGameError.message}</p>}
-        <button
-          className={styles.quitGameButton}
-          onClick={quitGameHandler}
-          disabled={deleteGameLoading}>
-          Quit Game
-        </button>
-        {deleteGameError && <p>{deleteGameError.message}</p>}
+      <div className={styles.buttonContainer}>
+        <div className={styles.buttonWrapper}>
+          <button
+            className={`${styles.button} ${styles.newGame}`}
+            onClick={createGameHandler}
+            disabled={deleteGameLoading || createGameLoading}>
+            New Game
+          </button>
+          <button
+            className={`${styles.button} ${styles.quitGame}`}
+            onClick={quitGameHandler}
+            disabled={deleteGameLoading}>
+            Quit Game
+          </button>
+        </div>
+        <p className={styles.error}>
+          {actionError && actionError.message}
+        </p>
       </div>
     </aside>
   );

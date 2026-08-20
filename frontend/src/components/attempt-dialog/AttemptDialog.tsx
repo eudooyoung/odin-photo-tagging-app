@@ -33,6 +33,9 @@ export const AttemptDialog = ({
       ref={attemptDialogRef}
       closedby="any"
       className={styles.attemptDialog}>
+      <p className={styles.error}>
+        {attemptError && attemptError.message}
+      </p>
       <ul className={styles.targetList}>
         {game.targets
           .filter((target) => !target.isFound)
@@ -44,7 +47,6 @@ export const AttemptDialog = ({
                 className={styles.targetAttemptButton}>
                 {target.name}
               </button>
-              {attemptError && <>{attemptError.message}</>}
             </li>
           ))}
       </ul>

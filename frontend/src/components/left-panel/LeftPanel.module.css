@@ -47,48 +47,63 @@
   padding: 0 var(--size-6);
 }
 
-.leftPanelButtons {
+.buttonContainer {
   flex: 1;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
-  row-gap: var(--size-6);
+  /* row-gap: var(--size-6); */
 }
 
-.leftPanelButtons > button {
+.buttonWrapper {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--size-6);
+  justify-content: center;
+}
+
+.button {
   border-radius: var(--radius-lg);
   padding: var(--size-2);
 }
 
-.leftPanelButtons > button:hover {
+.button:hover {
   transition-property: background-color color font-weight;
   transition-duration: 120ms;
   transition-timing-function: ease-in-out;
 }
 
-.newGameButton {
+.button.newGame {
   background-color: var(--green-200);
   box-shadow: 0 0 var(--size-1) var(--gray-300);
   color: var(--green-800);
 }
 
-.newGameButton:hover {
+.button.newGame:hover {
   background-color: var(--green-300);
   color: var(--green-900);
   font-weight: var(--weight-bold);
 }
 
-.quitGameButton {
+.button.quitGame {
   align-self: center;
   background-color: inherit;
   color: var(--gray-700);
 }
 
-.quitGameButton:hover {
+.button.quitGame:hover {
   color: var(--red-500);
   font-weight: var(--weight-bold);
   text-decoration: underline;
+}
+
+.error {
+  color: var(--red-500);
+  align-self: center;
+  min-height: var(--size-6);
 }
 
 @media (max-height: 800px) {
@@ -111,14 +126,16 @@
     row-gap: var(--size-3);
   }
 
-  .leftPanelButtons {
-    flex-direction: row-reverse;
-    align-items: center;
+  .buttonContainer {
     column-gap: var(--size-6);
   }
 
-  .newGameButton,
-  .quitGameButton {
+  .buttonWrapper {
+    flex-direction: row-reverse;
+    align-items: center;
+  }
+
+  .button {
     flex: 1;
   }
 }
@@ -139,13 +156,12 @@
     box-shadow: 0 0 var(--size-1) var(--gray-200);
   }
 
-  .leftPanelButtons {
+  .buttonWrapper {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .newGameButton,
-  .quitGameButton {
+  .button {
     flex: initial;
   }
 }
