@@ -19,6 +19,7 @@ export const ResultDialog = ({
   const [isPlayerSet, setIsPlayerSet] = useState(game.player !== null);
   const isGameEnded = game.record !== null;
   const record = game.record && formatRecord(game.record);
+  const actionError = playerError ?? createGameError;
 
   const setPlayerHandler: SubmitEventHandler = async (e) => {
     e.preventDefault();
@@ -77,10 +78,9 @@ export const ResultDialog = ({
         <button onClick={newGameHandler} disabled={createGameLoading}>
           New Game
         </button>
-        {playerError && <p className="error">{playerError.message}</p>}
-        {createGameError && (
-          <p className="error">{createGameError.message}</p>
-        )}
+        <p className={styles.error}>
+          {actionError && actionError.message}
+        </p>
       </form>
       <Link className={styles.leaderboardLink} to={"/leaderboard"}>
         See leaderboard

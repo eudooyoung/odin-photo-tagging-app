@@ -10,12 +10,17 @@
 
   display: flex;
   flex-direction: column;
-  row-gap: var(--size-6);
 }
 
 .resultTitle {
   color: var(--gray-900);
   font-size: var(--text-3xl);
+}
+
+.record {
+  color: var(--gray-800);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
 }
 
 .playerForm {
@@ -57,10 +62,9 @@
   color: var(--gray-100);
 }
 
-.record {
-  color: var(--gray-800);
-  font-size: var(--text-lg);
-  font-weight: var(--weight-semibold);
+.error {
+  color: var(--red-700);
+  min-height: var(--size-6);
 }
 
 .leaderboardLink {
