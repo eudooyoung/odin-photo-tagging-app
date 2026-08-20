@@ -61,7 +61,7 @@
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1500px) {
   .board {
     padding: var(--size-6) var(--size-12);
 

@@ -87,7 +87,7 @@
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1500px) {
   .rightPanel {
     padding: var(--size-2) var(--size-6);
     width: 100%;
