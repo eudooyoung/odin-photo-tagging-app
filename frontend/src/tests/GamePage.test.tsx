@@ -412,7 +412,7 @@ describe("game page", () => {
           player: null,
         },
       });
-      mockUsePlayer.mockReturnValue({
+      mockUsePlayer.mockReturnValueOnce({
         ...defaultUsePlayer,
         playerError: new Error("Player Error"),
       });
@@ -487,6 +487,7 @@ describe("game page", () => {
         ...defaultUseCreateGame,
         createGameError: new Error("create game error"),
       });
+
       renderGamePage();
       const resultDialog = screen.getByRole("dialog", {
         name: /game result/i,
