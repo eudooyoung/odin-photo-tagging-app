@@ -68,7 +68,10 @@ export const PuzzleBoard = ({
   const pointerDownHandler: PointerEventHandler = (e) => {
     didDragRef.current = false;
 
-    if (!viewPortRef.current || !spacePressedRef.current) {
+    if (
+      !viewPortRef.current ||
+      (e.pointerType === "mouse" && !spacePressedRef.current)
+    ) {
       return;
     }
     const viewPort = viewPortRef.current;

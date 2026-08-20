@@ -41,7 +41,7 @@ export const LeftPanel = () => {
           Press Space key to drag the image
         </p>
         <p className={styles.manualItem}>
-          Press + or - to Zoom in or out
+          Press + or - keys buttons to Zoom in or out
         </p>
       </div>
       <div className={styles.buttonContainer}>
