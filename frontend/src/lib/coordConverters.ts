@@ -29,6 +29,7 @@ export const imageToRelativeMarkerCoords = (
   return {
     left: (centerX / width) * 100,
     top: (centerY / height) * 100,
-    diameter: (diameter / width) * 100,
+    width: (diameter / width) * 100,
+    height: (diameter / height) * 100,
   };
 };

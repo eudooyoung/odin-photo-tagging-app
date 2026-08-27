@@ -21,8 +21,8 @@ export const TargetMarker = ({
         position && {
           left: `${position.left}%`,
           top: `${position.top}%`,
-          width: `${position.diameter}%`,
-          height: `${position.diameter}%`,
+          width: `${position.width}%`,
+          height: `${position.height}%`,
         }
       }
     />
