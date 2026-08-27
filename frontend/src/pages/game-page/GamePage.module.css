@@ -1,5 +1,5 @@
 .main {
-  height: calc(100dvh - var(--size-16));
+  height: calc(100dvh - var(--size-8) - var(--size-6));
   display: flex;
   justify-content: center;
 }

@@ -56,10 +56,19 @@
   object-fit: contain;
 }
 
-@media (max-height: 800px) {
-  .board {
-    padding-block: var(--size-8);
-  }
+.attemptMarker {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--red-700);
+  border-radius: var(--radius-full);
+  background-color: var(--yellow-300);
+  box-shadow:
+    0 0 0 3px var(--gray-50),
+    0 0 var(--size-2) var(--yellow-300);
+  pointer-events: none;
+  z-index: 1;
 }
 
 @media (max-width: 1500px) {
@@ -86,6 +95,20 @@
   .board {
     padding: var(--size-1);
     row-gap: var(--size-1);
+    box-shadow: inset 0 calc(-1 * var(--size-1)) var(--size-1)
+      var(--gray-100);
+  }
+}
+
+@media (orientation: landscape) and (max-height: 600px) and (pointer: coarse) {
+  .board {
+    padding: var(--size-3);
+    grid-template-columns:
+      minmax(var(--size-32), 1fr)
+      minmax(0, 3fr)
+      minmax(var(--size-32), 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    column-gap: var(--size-1);
     box-shadow: inset 0 calc(-1 * var(--size-1)) var(--size-1)
       var(--gray-100);
   }

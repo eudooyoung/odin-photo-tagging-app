@@ -13,6 +13,7 @@ export const GamePage = () => {
     x: -1,
     y: -1,
   });
+  const [isAttemptDialogOpen, setIsAttemptDialogOpen] = useState(false);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const attemptDialogRef = useRef<HTMLDialogElement | null>(null);
   const resultDialogRef = useRef<HTMLDialogElement | null>(null);
@@ -37,7 +38,10 @@ export const GamePage = () => {
         game={game}
         imageRef={imageRef}
         attemptDialogRef={attemptDialogRef}
+        attemptCoord={attemptCoord}
+        isAttemptDialogOpen={isAttemptDialogOpen}
         setAttemptCoord={setAttemptCoord}
+        onAttemptDialogOpen={() => setIsAttemptDialogOpen(true)}
       />
       <AttemptDialog
         game={game}
@@ -45,6 +49,7 @@ export const GamePage = () => {
         imageRef={imageRef}
         attemptDialogRef={attemptDialogRef}
         attemptCoord={attemptCoord}
+        onAttemptDialogClose={() => setIsAttemptDialogOpen(false)}
       />
       <ResultDialog game={game} resultDialogRef={resultDialogRef} />
     </main>

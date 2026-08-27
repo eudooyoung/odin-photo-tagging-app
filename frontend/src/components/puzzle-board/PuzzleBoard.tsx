@@ -13,12 +13,21 @@ import type { PuzzleBoardProps } from "@/types/props.types.ts";
 import { TargetMarker } from "../target-marker/TargetMarker.tsx";
 import { LeftPanel } from "../left-panel/LeftPanel.tsx";
 import { RightPanel } from "../right-panel/RightPanel.tsx";
+import { getAttemptDialogPlacement } from "@/lib/getAttemptDialogPlacement.ts";
+import { getAttemptDialogPosition } from "@/lib/getAttemptDialogPosition.ts";
+import { getAttemptDialogShift } from "@/lib/getAttemptDialogShift.ts";
+
+const ATTEMPT_DIALOG_ANCHOR_GAP = 12;
+const ATTEMPT_DIALOG_VIEWPORT_MARGIN = 16;
 
 export const PuzzleBoard = ({
   game,
   imageRef,
   attemptDialogRef,
+  attemptCoord,
+  isAttemptDialogOpen,
   setAttemptCoord,
+  onAttemptDialogOpen,
 }: PuzzleBoardProps) => {
   const [imageSize, setImageSize] = useState<{
     width: number;
@@ -126,12 +135,42 @@ export const PuzzleBoard = ({
     const { x, y } = screenToImageCoords(e, image);
     setAttemptCoord({ x, y });
     attemptDialog.showModal();
-    const { width: modalWidth, height: modalHeight } =
+    const { width: dialogWidth, height: dialogHeight } =
       attemptDialog.getBoundingClientRect();
-    const left = Math.min(e.clientX, window.innerWidth - modalWidth);
-    const right = Math.min(e.clientY, window.innerHeight - modalHeight);
-    attemptDialog.style.left = `${left - 5}px`;
-    attemptDialog.style.top = `${right - 5}px`;
+    const clickX = e.clientX;
+    const clickY = e.clientY;
+    const placement = getAttemptDialogPlacement({
+      clickX,
+      clickY,
+      viewportWidth: window.innerWidth,
+      viewportHeight: window.innerHeight,
+      dialogWidth,
+      dialogHeight,
+      gap: ATTEMPT_DIALOG_ANCHOR_GAP,
+    });
+    const { left, top } = getAttemptDialogPosition({
+      clickX,
+      clickY,
+      dialogWidth,
+      dialogHeight,
+      gap: ATTEMPT_DIALOG_ANCHOR_GAP,
+      placement,
+    });
+    const { shiftX, shiftY } = getAttemptDialogShift({
+      left,
+      top,
+      dialogWidth,
+      dialogHeight,
+      viewportWidth: window.innerWidth,
+      viewportHeight: window.innerHeight,
+      viewportMargin: ATTEMPT_DIALOG_VIEWPORT_MARGIN,
+    });
+    const finalLeft = left + shiftX;
+    const finalTop = top + shiftY;
+
+    attemptDialog.style.left = `${finalLeft}px`;
+    attemptDialog.style.top = `${finalTop}px`;
+    onAttemptDialogOpen();
   };
 
   const imageLoadHandler: ReactEventHandler<HTMLImageElement> = (e) => {
@@ -171,6 +210,16 @@ export const PuzzleBoard = ({
             className={styles.puzzleImage}
             draggable={false}
           />
+          {isAttemptDialogOpen && imageSize && (
+            <span
+              aria-hidden="true"
+              className={styles.attemptMarker}
+              style={{
+                left: `${(attemptCoord.x / imageSize.width) * 100}%`,
+                top: `${(attemptCoord.y / imageSize.height) * 100}%`,
+              }}
+            />
+          )}
           {game.targets
             .filter((target) => target.isFound)
             .map((target) => (

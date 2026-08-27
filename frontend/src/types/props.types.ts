@@ -4,12 +4,15 @@ export type PuzzleBoardProps = {
   game: Game;
   imageRef: React.RefObject<HTMLImageElement | null>;
   attemptDialogRef: React.RefObject<HTMLDialogElement | null>;
+  attemptCoord: { x: number; y: number };
+  isAttemptDialogOpen: boolean;
   setAttemptCoord: React.Dispatch<
     React.SetStateAction<{
       x: number;
       y: number;
     }>
   >;
+  onAttemptDialogOpen: () => void;
 };
 
 export type AttemptDialogProps = {
@@ -18,6 +21,7 @@ export type AttemptDialogProps = {
   imageRef: React.RefObject<HTMLImageElement | null>;
   attemptDialogRef: React.RefObject<HTMLDialogElement | null>;
   attemptCoord: { x: number; y: number };
+  onAttemptDialogClose: () => void;
 };
 
 export type ResultDialogProps = {

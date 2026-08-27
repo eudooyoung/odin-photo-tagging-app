@@ -56,7 +56,7 @@
   transition: background-color 140ms ease-in-out;
 }
 
-.heroButton:active {
+.heroButton:disabled {
   background-color: var(--gray-600);
   transition: none;
 }

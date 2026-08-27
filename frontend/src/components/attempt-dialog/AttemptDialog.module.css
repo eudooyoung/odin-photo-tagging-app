@@ -1,10 +1,20 @@
 .attemptDialog {
   padding: 0;
-  max-width: var(--size-192);
+  width: min(28rem, calc(100dvw - var(--size-8)));
+  height: min(16rem, calc(100dvh - var(--size-8)));
   background-color: var(--blue-300);
   border: none;
-  border-radius: 0 var(--radius-xl) var(--radius-xl) var(--radius-xl);
-  box-shadow: var(--shadow-xl);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 2px 8px hsl(150 15% 13% / 14%);
+}
+
+.attemptDialog::backdrop {
+  background-color: hsl(150 10% 13% / 8%);
+}
+
+.attemptDialog[open] {
+  display: flex;
+  flex-direction: column;
 }
 
 .targetList {
@@ -16,6 +26,9 @@
   display: flex;
   flex-direction: column;
   row-gap: var(--size-3);
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .targetAttemptButton {
@@ -44,9 +57,15 @@
   min-height: var(--size-6);
   padding: 0 var(--size-6);
   color: var(--red-700);
+  flex: 0 0 auto;
 }
 
 @media (max-width: 600px) {
+  .attemptDialog {
+    width: min(18rem, calc(100dvw - var(--size-8)));
+    height: min(18rem, calc(100dvh - var(--size-8)));
+  }
+
   .targetAttemptButton {
     min-height: var(--size-8);
     font-size: var(--text-xs);
@@ -56,5 +75,29 @@
     min-height: var(--size-6);
     color: var(--red-700);
     font-size: var(--text-xs);
+  }
+}
+
+@media (orientation: landscape) and (max-height: 600px) and (hover: none) and (pointer: coarse) {
+  .attemptDialog {
+    width: min(20rem, calc(100dvw - var(--size-8)));
+    height: min(11rem, calc(100dvh - var(--size-8)));
+  }
+
+  .targetAttemptButton {
+    min-height: var(--size-8);
+    font-size: var(--text-xs);
+  }
+
+  .error {
+    min-height: var(--size-6);
+    color: var(--red-700);
+    font-size: var(--text-xs);
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .targetAttemptButton {
+    min-height: 2.75rem;
   }
 }

@@ -13,6 +13,7 @@
 .banner {
   padding: var(--size-3);
   color: var(--green-800);
+  line-height: 1;
 }
 
 @media (max-width: 600px) {

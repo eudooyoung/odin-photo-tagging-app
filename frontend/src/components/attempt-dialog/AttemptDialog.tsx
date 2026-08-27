@@ -10,6 +10,7 @@ export const AttemptDialog = ({
   imageRef,
   attemptDialogRef,
   attemptCoord,
+  onAttemptDialogClose,
 }: AttemptDialogProps) => {
   const gameId = useParams().gameId as string;
   const { createAttempt, attemptError, attemptLoading } =
@@ -42,6 +43,7 @@ export const AttemptDialog = ({
       ref={attemptDialogRef}
       closedby="any"
       className={styles.attemptDialog}
+      onClose={onAttemptDialogClose}
       onClick={closeDialogHandler}>
       <p className={styles.error}>
         {attemptError && attemptError.message}

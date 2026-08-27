@@ -80,13 +80,6 @@
   transition-timing-function: ease-in-out;
 }
 
-@media (max-height: 800px) {
-  .rightPanel {
-    padding-block: var(--size-8);
-    row-gap: var(--size-6);
-  }
-}
-
 @media (max-width: 1500px) {
   .rightPanel {
     padding: var(--size-2) var(--size-6);
@@ -138,6 +131,37 @@
     flex-direction: column;
     align-items: stretch;
     row-gap: var(--size-3);
+  }
+
+  .zoomInButton,
+  .zoomOutButton {
+    flex: initial;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 600px) and (pointer: coarse) {
+  .rightPanel {
+    padding-inline: var(--size-2);
+    flex-direction: column;
+    row-gap: var(--size-2);
+  }
+
+  .targetList {
+    padding: var(--size-2) 0 var(--size-2) 0;
+    box-shadow: 0 0 var(--size-1) var(--gray-200);
+    font-size: var(--text-xs);
+    flex: 1 1 auto;
+  }
+
+  .targetListItem {
+    padding: 0 var(--size-4);
+  }
+
+  .rightPanelButtons {
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--size-1);
   }
 
   .zoomInButton,

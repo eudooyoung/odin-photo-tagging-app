@@ -53,7 +53,6 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* row-gap: var(--size-6); */
 }
 
 .buttonWrapper {
@@ -104,13 +103,6 @@
   color: var(--red-500);
   align-self: center;
   min-height: var(--size-6);
-}
-
-@media (max-height: 800px) {
-  .leftPanel {
-    padding-block: var(--size-8);
-    row-gap: var(--size-6);
-  }
 }
 
 @media (max-width: 1500px) {
@@ -169,6 +161,40 @@
   }
 
   .button {
+    flex: initial;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 600px) and (pointer: coarse) {
+  .leftPanel {
+    padding-inline: var(--size-2);
+    flex-direction: column;
+    row-gap: var(--size-2);
+  }
+
+  .manual {
+    padding: var(--size-2) 0 var(--size-2) 0;
+    box-shadow: 0 0 var(--size-1) var(--gray-200);
+    font-size: var(--text-xs);
+    flex: 1 1 auto;
+  }
+
+  .manualItem {
+    padding: 0 var(--size-4);
+  }
+
+  .buttonContainer {
+    flex: 0 0 auto;
+  }
+
+  .buttonWrapper {
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: var(--size-1);
+  }
+
+  .button {
+    width: 100%;
     flex: initial;
   }
 }

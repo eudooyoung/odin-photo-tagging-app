@@ -23,7 +23,7 @@ export const LandingPage = () => {
             className={styles.heroButton}
             onClick={startButtonHandler}
             disabled={createGameLoading}>
-            Start
+            {!createGameLoading ? "Start" : "Creating Game..."}
           </button>
           <p className={styles.heroError}>
             {createGameError && createGameError.message}
