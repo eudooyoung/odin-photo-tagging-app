@@ -62,10 +62,7 @@
 }
 
 .heroLink {
-  font-size: clamp(--var(--text-xs), 3dvw, var(--text-base));
-}
-
-.heroLink {
+  font-size: clamp(var(--text-xs), 3dvw, var(--text-base));
   color: var(--gray-700);
   font-weight: var(--weight-normal);
 }
@@ -81,4 +78,21 @@
 .heroError {
   min-height: var(--size-6);
   color: var(--red-700);
+}
+
+@media (orientation: landscape) and (max-height: 600px) and (hover: none) and (pointer: coarse) {
+  .heroContent {
+    width: min(70dvw, var(--size-96));
+    height: min(80dvw, 80dvh, var(--size-96));
+    row-gap: var(--size-2);
+  }
+
+  .heroTitle {
+    font-size: var(--text-5xl);
+  }
+
+  .heroButton {
+    padding: var(--size-1) var(--size-6);
+    font-size: var(--text-xl);
+  }
 }
