@@ -7,7 +7,7 @@ export const RightPanel = ({
   onClickZoomIn,
   onClickZoomOut,
 }: RightPanelProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <div className={styles.rightPanel}>
@@ -16,7 +16,7 @@ export const RightPanel = ({
           <li
             className={`${styles.targetListItem}  ${target.isFound ? styles.found : ""}`}
             key={target.id}>
-            {target.name}
+            {i18n.resolvedLanguage === "ko" ? target.nameKo : target.name}
           </li>
         ))}
       </ul>

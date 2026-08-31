@@ -7,6 +7,7 @@ export type Game = {
 
   targets: {
     name: string;
+    nameKo: string;
     id: number;
     isFound: boolean;
     x?: number;

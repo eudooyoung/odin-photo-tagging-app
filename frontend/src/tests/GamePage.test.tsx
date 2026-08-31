@@ -1,6 +1,13 @@
 import { GamePage } from "@/pages/game-page/GamePage.tsx";
 import { GameRouter } from "@/routes/GameRouter.tsx";
-import { render, screen, waitFor, within } from "@testing-library/react";
+import i18n from "@/i18n.ts";
+import {
+  act,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -21,7 +28,9 @@ const {
   const defaultUseGame = {
     game: {
       id: "gameId",
-      targets: [{ id: 1, name: "target-1", isFound: false }],
+      targets: [
+        { id: 1, name: "target-1", nameKo: "대상-1", isFound: false },
+      ],
       record: null as number | null,
       player: null as string | null,
     },
@@ -110,7 +119,9 @@ const renderGamePage = () => {
 };
 
 describe("game page", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
+    await i18n.changeLanguage("en");
+
     HTMLDialogElement.prototype.showModal = vi.fn(function (
       this: HTMLDialogElement,
     ) {
@@ -159,11 +170,13 @@ describe("game page", () => {
     });
 
     it("render marks when targets found", () => {
-      mockUseGame.mockReturnValue({
+      mockUseGame.mockReturnValueOnce({
         ...defaultUseGame,
         game: {
           id: "gameId",
-          targets: [{ id: 1, name: "target-1", isFound: true }],
+          targets: [
+            { id: 1, name: "target-1", nameKo: "대상-1", isFound: true },
+          ],
           record: null,
           player: null,
         },
@@ -262,6 +275,69 @@ describe("game page", () => {
     });
   });
 
+  describe("localized target names", () => {
+    const getRightPanel = () => {
+      const zoomInButton = screen.getByRole("button", {
+        name: /zoom in|확대/i,
+      });
+      return zoomInButton.parentElement!.parentElement!;
+    };
+
+    it("shows English target names in the attempt dialog and right panel", async () => {
+      const user = userEvent.setup();
+      renderGamePage();
+
+      expect(
+        within(getRightPanel()).getByText("target-1"),
+      ).toBeInTheDocument();
+
+      await user.click(screen.getByRole("img", { name: /puzzle/i }));
+      expect(
+        screen.getByRole("button", { name: "target-1" }),
+      ).toBeInTheDocument();
+    });
+
+    it("shows Korean target names in the attempt dialog and right panel", async () => {
+      const user = userEvent.setup();
+      await i18n.changeLanguage("ko");
+      renderGamePage();
+
+      expect(
+        within(getRightPanel()).getByText("대상-1"),
+      ).toBeInTheDocument();
+
+      await user.click(
+        screen.getByRole("img", { name: "숨은그림찾기 퍼즐 이미지" }),
+      );
+      expect(
+        screen.getByRole("button", { name: "대상-1" }),
+      ).toBeInTheDocument();
+    });
+
+    it("updates target names immediately when the language changes", async () => {
+      const user = userEvent.setup();
+      renderGamePage();
+      const rightPanel = getRightPanel();
+
+      await user.click(screen.getByRole("img", { name: /puzzle/i }));
+      expect(
+        within(rightPanel).getByText("target-1"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "target-1" }),
+      ).toBeInTheDocument();
+
+      await act(async () => {
+        await i18n.changeLanguage("ko");
+      });
+
+      expect(within(rightPanel).getByText("대상-1")).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "대상-1" }),
+      ).toBeInTheDocument();
+    });
+  });
+
   describe("attempt dialog", () => {
     it("refetch game when hits", async () => {
       const user = userEvent.setup();
@@ -317,7 +393,9 @@ describe("game page", () => {
         ...defaultUseGame,
         game: {
           id: "gameId",
-          targets: [{ id: 1, name: "target-1", isFound: true }],
+          targets: [
+            { id: 1, name: "target-1", nameKo: "대상-1", isFound: true },
+          ],
           record: 13_358_792,
           player: null,
         },
@@ -354,7 +432,9 @@ describe("game page", () => {
         ...defaultUseGame,
         game: {
           id: "gameId",
-          targets: [{ id: 1, name: "target-1", isFound: true }],
+          targets: [
+            { id: 1, name: "target-1", nameKo: "대상-1", isFound: true },
+          ],
           record: 123,
           player: null,
         },
@@ -386,7 +466,9 @@ describe("game page", () => {
         ...defaultUseGame,
         game: {
           id: "gameId",
-          targets: [{ id: 1, name: "target-1", isFound: true }],
+          targets: [
+            { id: 1, name: "target-1", nameKo: "대상-1", isFound: true },
+          ],
           record: 123,
           player: null,
         },
@@ -407,7 +489,9 @@ describe("game page", () => {
         ...defaultUseGame,
         game: {
           id: "gameId",
-          targets: [{ id: 1, name: "target-1", isFound: true }],
+          targets: [
+            { id: 1, name: "target-1", nameKo: "대상-1", isFound: true },
+          ],
           record: 123,
           player: null,
         },
@@ -427,7 +511,9 @@ describe("game page", () => {
         ...defaultUseGame,
         game: {
           id: "gameId",
-          targets: [{ id: 1, name: "target-1", isFound: true }],
+          targets: [
+            { id: 1, name: "target-1", nameKo: "대상-1", isFound: true },
+          ],
           record: 123,
           player: "player",
         },
@@ -456,7 +542,9 @@ describe("game page", () => {
         ...defaultUseGame,
         game: {
           id: "gameId",
-          targets: [{ id: 1, name: "target-1", isFound: true }],
+          targets: [
+            { id: 1, name: "target-1", nameKo: "대상-1", isFound: true },
+          ],
           record: 123,
           player: "player",
         },
@@ -478,7 +566,9 @@ describe("game page", () => {
         ...defaultUseGame,
         game: {
           id: "gameId",
-          targets: [{ id: 1, name: "target-1", isFound: true }],
+          targets: [
+            { id: 1, name: "target-1", nameKo: "대상-1", isFound: true },
+          ],
           record: 123,
           player: "player",
         },
