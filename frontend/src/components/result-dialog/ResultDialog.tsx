@@ -5,11 +5,13 @@ import { useEffect, useState, type SubmitEventHandler } from "react";
 import { useCreateGame } from "@/hooks/useCreateGame.ts";
 import type { ResultDialogProps } from "@/types/props.types.ts";
 import { usePlayer } from "@/hooks/usePlayer.ts";
+import { useTranslation } from "react-i18next";
 
 export const ResultDialog = ({
   game,
   resultDialogRef,
 }: ResultDialogProps) => {
+  const { t } = useTranslation();
   const gameId = useParams().gameId as string;
   const { createGame, createGameError, createGameLoading } =
     useCreateGame();
@@ -50,18 +52,20 @@ export const ResultDialog = ({
       onCancel={(e) => e.preventDefault()}
       className={styles.resultDialog}>
       <h2 id="result-title" className={styles.resultTitle}>
-        Game result
+        {t("result.title")}
       </h2>
       <div className={styles.record}>
-        Record:{" "}
-        {record &&
-          `${record.hours}:${record.minutes}:${record.seconds}.${record.milliseconds}`}
+        {t("result.record", {
+          value:
+            record &&
+            `${record.hours}:${record.minutes}:${record.seconds}.${record.milliseconds}`,
+        })}
       </div>
       <form onSubmit={setPlayerHandler} className={styles.playerForm}>
         {!isPlayerSet && (
           <>
             <label className="visuallyHidden" htmlFor="player">
-              player
+              {t("result.playerLabel")}
             </label>
             <input
               type="text"
@@ -69,21 +73,21 @@ export const ResultDialog = ({
               id="player"
               value={playerInput}
               onChange={(e) => setPlayerInput(e.target.value)}
-              placeholder="Enter player name"
+              placeholder={t("result.playerPlaceholder")}
               className={styles.playerInput}
             />
-            <button disabled={playerLoading}>Submit</button>
+            <button disabled={playerLoading}>{t("result.submit")}</button>
           </>
         )}
         <button onClick={newGameHandler} disabled={createGameLoading}>
-          New Game
+          {t("common.newGame")}
         </button>
         <p className={styles.error}>
           {actionError && actionError.message}
         </p>
       </form>
       <Link className={styles.leaderboardLink} to={"/leaderboard"}>
-        See leaderboard
+        {t("common.seeLeaderboard")}
       </Link>
     </dialog>
   );

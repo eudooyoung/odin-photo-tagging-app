@@ -5,8 +5,10 @@ import { AttemptDialog } from "@/components/attempt-dialog/AttemptDialog.tsx";
 import { ResultDialog } from "@/components/result-dialog/ResultDialog.tsx";
 import { useGame } from "@/hooks/useGame.ts";
 import { useParams } from "react-router";
+import { useTranslation } from "react-i18next";
 
 export const GamePage = () => {
+  const { t } = useTranslation();
   const gameId = useParams().gameId as string;
   const { game, gameError, gameLoading, refetchGame } = useGame(gameId);
   const [attemptCoord, setAttemptCoord] = useState({
@@ -19,7 +21,7 @@ export const GamePage = () => {
   const resultDialogRef = useRef<HTMLDialogElement | null>(null);
 
   if (!game && gameLoading) {
-    return <main className={styles.main}>game loading...</main>;
+    return <main className={styles.main}>{t("game.loading")}</main>;
   }
 
   if (!game) {
@@ -32,7 +34,7 @@ export const GamePage = () => {
 
   return (
     <main className={styles.main}>
-      <h2 className="visuallyHidden">Game Page</h2>
+      <h2 className="visuallyHidden">{t("game.pageTitle")}</h2>
       <p className="error">{gameError && gameError.message}</p>
       <PuzzleBoard
         game={game}

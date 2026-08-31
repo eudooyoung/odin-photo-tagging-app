@@ -2,8 +2,10 @@ import { useDeleteGame } from "@/hooks/useDeleteGame.ts";
 import styles from "./LeftPanel.module.css";
 import { useNavigate, useParams } from "react-router";
 import { useCreateGame } from "@/hooks/useCreateGame.ts";
+import { useTranslation } from "react-i18next";
 
 export const LeftPanel = () => {
+  const { t } = useTranslation();
   const gameId = useParams().gameId as string;
   const navigate = useNavigate();
   const { deleteGame, deleteGameError, deleteGameLoading } =
@@ -32,16 +34,16 @@ export const LeftPanel = () => {
   };
 
   return (
-    <aside aria-label="game sidebar" className={styles.leftPanel}>
+    <aside aria-label={t("game.sidebarLabel")} className={styles.leftPanel}>
       <div className={styles.manual}>
         <p className={styles.manualItem}>
-          Click the image and choose the target you found
+          {t("game.instructions.selectTarget")}
         </p>
         <p className={styles.manualItem}>
-          Press Space key to drag the image
+          {t("game.instructions.dragImage")}
         </p>
         <p className={styles.manualItem}>
-          Press + or - keys buttons to Zoom in or out
+          {t("game.instructions.zoomImage")}
         </p>
       </div>
       <div className={styles.buttonContainer}>
@@ -50,13 +52,13 @@ export const LeftPanel = () => {
             className={`${styles.button} ${styles.newGame}`}
             onClick={createGameHandler}
             disabled={deleteGameLoading || createGameLoading}>
-            New Game
+            {t("common.newGame")}
           </button>
           <button
             className={`${styles.button} ${styles.quitGame}`}
             onClick={quitGameHandler}
             disabled={deleteGameLoading}>
-            Quit Game
+            {t("game.quit")}
           </button>
         </div>
         <p className={styles.error}>

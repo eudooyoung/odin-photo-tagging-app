@@ -8,6 +8,7 @@ describe("attemptValidator", () => {
       {
         id: 1,
         name: "target1",
+        nameKo: "대상-1",
         x: 0,
         y: 0,
         width: 50,
@@ -25,6 +26,7 @@ describe("attemptValidator", () => {
       {
         id: 1,
         name: "target1",
+        nameKo: "대상-1",
         x: 0,
         y: 0,
         width: 50,

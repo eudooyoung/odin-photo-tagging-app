@@ -3,6 +3,7 @@ import styles from "./AttemptDialog.module.css";
 import type { AttemptDialogProps } from "@/types/props.types.ts";
 import { useAttempt } from "@/hooks/useAttempt.ts";
 import type { MouseEventHandler } from "react";
+import { useTranslation } from "react-i18next";
 
 export const AttemptDialog = ({
   game,
@@ -12,6 +13,7 @@ export const AttemptDialog = ({
   attemptCoord,
   onAttemptDialogClose,
 }: AttemptDialogProps) => {
+  const { i18n } = useTranslation();
   const gameId = useParams().gameId as string;
   const { createAttempt, attemptError, attemptLoading } =
     useAttempt(gameId);
@@ -57,7 +59,9 @@ export const AttemptDialog = ({
                 onClick={createAttemptHandler(target.id)}
                 disabled={attemptLoading}
                 className={styles.targetAttemptButton}>
-                {target.name}
+                {i18n.resolvedLanguage === "ko"
+                  ? target.nameKo
+                  : target.name}
               </button>
             </li>
           ))}

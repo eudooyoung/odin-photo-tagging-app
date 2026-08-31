@@ -16,6 +16,7 @@ import { RightPanel } from "../right-panel/RightPanel.tsx";
 import { getAttemptDialogPlacement } from "@/lib/getAttemptDialogPlacement.ts";
 import { getAttemptDialogPosition } from "@/lib/getAttemptDialogPosition.ts";
 import { getAttemptDialogShift } from "@/lib/getAttemptDialogShift.ts";
+import { useTranslation } from "react-i18next";
 
 const ATTEMPT_DIALOG_ANCHOR_GAP = 12;
 const ATTEMPT_DIALOG_VIEWPORT_MARGIN = 16;
@@ -29,6 +30,7 @@ export const PuzzleBoard = ({
   setAttemptCoord,
   onAttemptDialogOpen,
 }: PuzzleBoardProps) => {
+  const { t } = useTranslation();
   const [imageSize, setImageSize] = useState<{
     width: number;
     height: number;
@@ -203,7 +205,7 @@ export const PuzzleBoard = ({
           className={styles.imageWrapper}>
           <img
             src={PuzzleImage}
-            alt="puzzle image"
+            alt={t("game.puzzleImageAlt")}
             onClick={imgClickHandler}
             onLoad={imageLoadHandler}
             ref={imageRef}
