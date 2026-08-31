@@ -1,8 +1,10 @@
 import { useLeaderboard } from "@/hooks/useLeaderboard.ts";
 import styles from "./LeaderboardPage.module.css";
 import { formatRecord } from "@/lib/formatRecord";
+import { useTranslation } from "react-i18next";
 
 export const LeaderboardPage = () => {
+  const { t } = useTranslation();
   const { leaderboard, leaderboardError, leaderboardLoading } =
     useLeaderboard();
 
@@ -16,10 +18,12 @@ export const LeaderboardPage = () => {
 
   return (
     <main className={styles.main}>
-      {leaderboardLoading && <>Loading...</>}
+      {leaderboardLoading && <>{t("leaderboard.loading")}</>}
       <div className={styles.leaderboardWrapper}>
         <table className={styles.leaderboard}>
-          <caption className={styles.caption}>Leaderboard</caption>
+          <caption className={styles.caption}>
+            {t("leaderboard.title")}
+          </caption>
           <colgroup>
             <col className={styles.rankCol} />
             <col className={styles.playerCol} />
@@ -28,13 +32,13 @@ export const LeaderboardPage = () => {
           <thead>
             <tr className={styles.colHeaderRow}>
               <th className={styles.colHeader} scope="col">
-                Ranking
+                {t("leaderboard.ranking")}
               </th>
               <th className={styles.colHeader} scope="col">
-                Player
+                {t("leaderboard.player")}
               </th>
               <th className={styles.colHeader} scope="col">
-                Record
+                {t("leaderboard.record")}
               </th>
             </tr>
           </thead>

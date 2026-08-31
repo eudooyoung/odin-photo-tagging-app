@@ -1,8 +1,10 @@
 import { Link, useNavigate } from "react-router";
 import styles from "./LandingPage.module.css";
 import { useCreateGame } from "@/hooks/useCreateGame.ts";
+import { useTranslation } from "react-i18next";
 
 export const LandingPage = () => {
+  const { t } = useTranslation();
   const { createGame, createGameError, createGameLoading } =
     useCreateGame();
   const navigate = useNavigate();
@@ -23,13 +25,15 @@ export const LandingPage = () => {
             className={styles.heroButton}
             onClick={startButtonHandler}
             disabled={createGameLoading}>
-            {!createGameLoading ? "Start" : "Creating Game..."}
+            {!createGameLoading
+              ? t("landing.start")
+              : t("landing.creatingGame")}
           </button>
           <p className={styles.heroError}>
             {createGameError && createGameError.message}
           </p>
           <Link className={styles.heroLink} to={"/leaderboard"}>
-            See Leaderboard
+            {t("common.seeLeaderboard")}
           </Link>
         </div>
       </div>

@@ -1,0 +1,44 @@
+{
+  "common": {
+    "newGame": "새 게임",
+    "seeLeaderboard": "리더보드 보기"
+  },
+  "landing": {
+    "start": "시작",
+    "creatingGame": "게임 생성 중..."
+  },
+  "footer": {
+    "builtBy": "제작자:"
+  },
+  "languageSwitcher": {
+    "label": "언어 선택"
+  },
+  "game": {
+    "loading": "게임 불러오는 중...",
+    "pageTitle": "게임 화면",
+    "sidebarLabel": "게임 사이드바",
+    "instructions": {
+      "selectTarget": "이미지를 클릭한 뒤 찾은 대상을 선택하세요.",
+      "dragImage": "스페이스 키를 누른 채 이미지를 드래그하세요.",
+      "zoomImage": "확대하거나 축소하려면 + 또는 - 키를 누르세요."
+    },
+    "quit": "게임 종료",
+    "zoomIn": "확대",
+    "zoomOut": "축소",
+    "puzzleImageAlt": "숨은그림찾기 퍼즐 이미지"
+  },
+  "result": {
+    "title": "게임 결과",
+    "record": "기록: {{value}}",
+    "playerLabel": "플레이어",
+    "playerPlaceholder": "플레이어 이름을 입력하세요",
+    "submit": "등록"
+  },
+  "leaderboard": {
+    "loading": "리더보드 불러오는 중...",
+    "title": "리더보드",
+    "ranking": "순위",
+    "player": "플레이어",
+    "record": "기록"
+  }
+}

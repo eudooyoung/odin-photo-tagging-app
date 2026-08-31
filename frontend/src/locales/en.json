@@ -1,0 +1,44 @@
+{
+  "common": {
+    "newGame": "New Game",
+    "seeLeaderboard": "See Leaderboard"
+  },
+  "landing": {
+    "start": "Start",
+    "creatingGame": "Creating Game..."
+  },
+  "footer": {
+    "builtBy": "Built by"
+  },
+  "languageSwitcher": {
+    "label": "Language"
+  },
+  "game": {
+    "loading": "Game loading...",
+    "pageTitle": "Game Page",
+    "sidebarLabel": "Game sidebar",
+    "instructions": {
+      "selectTarget": "Click the image and choose the target you found",
+      "dragImage": "Press the Space key to drag the image",
+      "zoomImage": "Press the + or - key to zoom in or out"
+    },
+    "quit": "Quit Game",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "puzzleImageAlt": "Puzzle image"
+  },
+  "result": {
+    "title": "Game result",
+    "record": "Record: {{value}}",
+    "playerLabel": "Player",
+    "playerPlaceholder": "Enter player name",
+    "submit": "Submit"
+  },
+  "leaderboard": {
+    "loading": "Loading...",
+    "title": "Leaderboard",
+    "ranking": "Ranking",
+    "player": "Player",
+    "record": "Record"
+  }
+}

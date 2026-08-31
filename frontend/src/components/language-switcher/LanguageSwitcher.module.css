@@ -1,0 +1,37 @@
+.languageSwitcher {
+  position: fixed;
+  inset-block-start: var(--size-3);
+  inset-inline-end: var(--size-3);
+  z-index: 10;
+
+  display: flex;
+  gap: var(--size-1);
+  padding: var(--size-1);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-lg);
+  background-color: var(--gray-100);
+  box-shadow: var(--shadow-sm);
+}
+
+.languageButton {
+  padding: var(--size-1) var(--size-2);
+  border-radius: var(--radius-md);
+  background-color: transparent;
+  color: var(--gray-700);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.languageButton:hover {
+  background-color: var(--green-100);
+}
+
+.languageButton[aria-pressed="true"] {
+  background-color: var(--green-700);
+  color: var(--gray-50);
+}
+
+.languageButton:focus-visible {
+  outline: 2px solid var(--green-700);
+  outline-offset: 2px;
+}
