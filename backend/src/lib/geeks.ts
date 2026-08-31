@@ -2,6 +2,7 @@ export const geeks = [
   {
     id: 1,
     name: "Geek in burgundy playing Super Mario",
+    nameKo: "버건디색 옷을 입고 슈퍼 마리오를 플레이하는 Geek",
     x: 1299,
     y: 326,
     width: 88,
@@ -10,6 +11,7 @@ export const geeks = [
   {
     id: 2,
     name: "Geek in light green giving a presentation about binary to other geeks",
+    nameKo: "연두색 옷을 입고 다른 Geek들에게 이진법을 발표하는 Geek",
     x: 910,
     y: 339,
     width: 64,
@@ -19,6 +21,7 @@ export const geeks = [
   {
     id: 3,
     name: "Geek in blue looking into a portal",
+    nameKo: "파란색 옷을 입고 포털 안을 들여다보는 Geek",
     x: 1080,
     y: 143,
     width: 59,
@@ -27,6 +30,7 @@ export const geeks = [
   {
     id: 4,
     name: "Geek in blue looking out through a portal",
+    nameKo: "파란색 옷을 입고 포털 밖을 내다보는 Geek",
     x: 1590,
     y: 16,
     width: 57,
@@ -35,6 +39,7 @@ export const geeks = [
   {
     id: 5,
     name: "Geek in purple wearing a hat watching a robot battle",
+    nameKo: "모자를 쓰고 로봇 대결을 구경하는 보라색 옷의 Geek",
     x: 352,
     y: 1406,
     width: 45,
@@ -43,6 +48,7 @@ export const geeks = [
   {
     id: 6,
     name: "Geek in purple with blue hair bowling with beer bottles",
+    nameKo: "파란 머리에 보라색 옷을 입고 맥주병으로 볼링하는 Geek",
     x: 1527,
     y: 714,
     width: 129,
@@ -51,6 +57,7 @@ export const geeks = [
   {
     id: 7,
     name: "Geek in white watching a beer-bottle bowling",
+    nameKo: "흰색 옷을 입고 맥주병 볼링을 구경하는 Geek",
     x: 1339,
     y: 613,
     width: 48,
@@ -59,6 +66,7 @@ export const geeks = [
   {
     id: 8,
     name: "Geek in a black top with a lambda symbol",
+    nameKo: "람다 기호가 있는 검은색 상의를 입은 Geek",
     x: 867,
     y: 1602,
     width: 45,
@@ -67,6 +75,7 @@ export const geeks = [
   {
     id: 9,
     name: "Geek in a black T-shirt with a bagua symbol",
+    nameKo: "팔괘 무늬가 있는 검은색 티셔츠를 입은 Geek",
     x: 230,
     y: 1594,
     width: 56,
@@ -75,6 +84,7 @@ export const geeks = [
   {
     id: 10,
     name: "Geek in light green sorting rubber balls by color",
+    nameKo: "연두색 옷을 입고 고무공을 색깔별로 분류하는 Geek",
     x: 1094,
     y: 864,
     width: 57,
@@ -83,6 +93,7 @@ export const geeks = [
   {
     id: 11,
     name: "Geek in green watching another geek soldering",
+    nameKo: "다른 Geek이 납땜하는 모습을 지켜보는 초록색 옷의 Geek",
     x: 1794,
     y: 1420,
     width: 55,
@@ -91,6 +102,7 @@ export const geeks = [
   {
     id: 12,
     name: "Geek in orange soldering a circuit board",
+    nameKo: "주황색 옷을 입고 회로 기판을 납땜하는 Geek",
     x: 1883,
     y: 1426,
     width: 85,
@@ -99,6 +111,7 @@ export const geeks = [
   {
     id: 13,
     name: "Geek in pink cycling with AR glasses on",
+    nameKo: "AR 안경을 쓰고 자전거를 타는 분홍색 옷의 Geek",
     x: 2362,
     y: 1226,
     width: 83,
@@ -107,6 +120,7 @@ export const geeks = [
   {
     id: 14,
     name: "Geek in olive green working on a laptop in a ball pit",
+    nameKo: "올리브색 옷을 입고 볼풀 안에서 노트북으로 작업하는 Geek",
     x: 1207,
     y: 1020,
     width: 62,
@@ -115,6 +129,7 @@ export const geeks = [
   {
     id: 15,
     name: "Geek taking a nap in a green sleeping bag",
+    nameKo: "초록색 침낭에서 낮잠 자는 Geek",
     x: 1553,
     y: 352,
     width: 86,
@@ -123,6 +138,7 @@ export const geeks = [
   {
     id: 16,
     name: "Geek in gray looking sad at a laptop",
+    nameKo: "회색 옷을 입고 노트북을 보며 슬퍼하는 Geek",
     x: 998,
     y: 1452,
     width: 53,

@@ -52,6 +52,7 @@ export const getGame: RequestHandler = (req, res) => {
         : {
             id: target.id,
             name: target.name,
+            nameKo: target.nameKo,
           },
     )
     .sort((targetA, targetB) => targetA.id - targetB.id);

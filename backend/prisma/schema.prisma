@@ -15,6 +15,7 @@ datasource db {
 model Geek {
   id     Int    @id
   name   String @unique
+  nameKo String
   x      Int
   y      Int
   width  Int

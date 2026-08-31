@@ -12,7 +12,10 @@ export type GameWithTargets = Game & {
   targets: Target[];
 };
 
-export type PublicTarget = Pick<Target, "id" | "name" | "isFound">;
+export type PublicTarget = Pick<
+  Target,
+  "id" | "name" | "nameKo" | "isFound"
+>;
 
 export type GameWithPublicTargets = Game & {
   targets: PublicTarget[];

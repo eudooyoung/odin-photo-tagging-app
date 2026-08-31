@@ -43,6 +43,10 @@ describe("game api", () => {
     expect(res.status).toBe(200);
     expect(game).toEqual(expect.objectContaining({ publicId }));
     expect(game.targets).toHaveLength(5);
+    for (const target of game.targets) {
+      expect(target.name).toBeTypeOf("string");
+      expect(target.nameKo).toBeTypeOf("string");
+    }
   });
 
   it("target attempt successful", async () => {
