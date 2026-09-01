@@ -1,11 +1,8 @@
 .marker {
   position: absolute;
-  fill: var(--blue-900);
-  filter: drop-shadow(-0.35px 0 0 var(--blue-900))
-    drop-shadow(0.35px 0 0 var(--blue-900))
-    drop-shadow(0 -0.35px 0 var(--blue-900))
-    drop-shadow(0 0.35px 0 var(--blue-900))
-    drop-shadow(0 0 1px var(--gray-50))
-    drop-shadow(0 1px 1px hsl(0 0% 0% / 0.3));
+  fill: var(--red-500);
+  filter: drop-shadow(-0.35px 0 0 var(--red-500)) drop-shadow(0.35px 0 0 var(--red-500))
+    drop-shadow(0 -0.35px 0 var(--red-500)) drop-shadow(0 0.35px 0 var(--red-500))
+    drop-shadow(0 0 1px var(--gray-50)) drop-shadow(0 1px 1px hsl(0 0% 0% / 0.3));
   pointer-events: none;
 }
